@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Farstun" />
+    <title>Farstun</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="weatherbox">
+      <div id="weather-pcpnbox">
+        <h1 id="weather-h1-pcpn">Väder i Göteborg</h1>
+        <p id="weather-pcpn-now"></p>
+        <h2 class="forecast-topic">Väder Prognos</h2>
+        <p class="forecast" id="weather-pcpn-forecast"></p>
+      </div>
+      <div id="weather-windbox">
+        <h2 class="weather-topic" id="weather-h2-wind">Vind</h2>
+        <p id="weather-wind-now"></p>
+        <h3 class="forecast-topic">Vind Prognos</h3>
+        <p class="forecast" id="weather-wind-forecast"></p>
+      </div>
+      <div id="weather-tempbox">
+        <h2 class="weather-topic" id="weather-h2-temp">Temperatur</h2>
+        <p id="weather-temp-now"></p>
+        <h3 class="forecast-topic">Temperatur Prognos</h3>
+        <p class="forecast" id="weather-temp-forecast"></p>
+      </div>
+      <canvas id="canvas" with="30" height="50"></canvas>
+    </div>
+    <div id="weather-sunbox">
+      <h2 class="weather-topic" id="weather-h2-sun">Solens upp- och nedgång</h2>
+      <p id="weather-sunrise"></p>
+      <p id="weather-sunset"></p>
+    </div>
+    <div id="animebox">Animebox</div>
+    <div id="daybox"></div>
+    <div id="vtbox">
+      <h2 id="vt-topic">Västtrafik Avgångstavla</h2>
+      <p id="vt-station-p"></p>
+      <table id="vt-dp-table">
+        <tr>
+          <th id="th-dp-line">Linje</th>
+          <th id="th-dp-direc">Riktning</th>
+          <th id="th-dp-next">Nästa</th>
+        </tr>
+        <tr class="vtlightgrey">
+          <td><div id="first-dp-sname"></div></td>
+          <td id="first-dp-direction"></td>
+          <td id="first-dp-time"></td>
+        </tr>
+        <tr>
+          <td><div id="second-dp-sname"></div></td>
+          <td id="second-dp-direction"></td>
+          <td id="second-dp-time"></td>
+        </tr>
+        <tr class="vtlightgrey">
+          <td><div id="third-dp-sname"></div></td>
+          <td id="third-dp-direction"></td>
+          <td id="third-dp-time"></td>
+        </tr>
+      </table>
+      <!-- för manuell uppdatering av avgångstavlan kan de här knapparna användas: -->
+      <!-- <div id="vt-dp-button-div">
+        <button id="vt-dp-button">Uppdatera</button>
+      </div> -->
+      <!-- <button id="vt-dp-button-stop">Avbryt Uppdatera Hållplatstablån</button> -->
+    </div>
+    <footer id="footer-index">
+      <i class="bi bi-list" id="burger-index"></i>
+      <nav id="link-index" style="display: none">
+        <a href="settings.html">Inställningar</a>
+      </nav>
+    </footer>
+    <script src="index.js"></script>
+  </body>
+</html>

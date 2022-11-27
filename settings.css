@@ -1,0 +1,126 @@
+@font-face {
+  font-family: cosmo;
+  src: url(PressStart2P-Regular.ttf) format(truetype);
+}
+
+body {
+  font-family: cosmo;
+  background-image: url(mushroomtreeverle.png);
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 100%;
+  color: rgb(132, 199, 253);
+}
+
+.set-button {
+  background-color: #2a4920;
+  color: rgb(229, 215, 252);
+  border-radius: 100%;
+  border-color: #0564b8;
+  padding: 7px 10px;
+  font-family: cosmo;
+  font-size: .6rem;
+}
+
+#settings-h1 {
+  font-size: 3rem;
+}
+
+.set {
+  padding: 10px 20px 10px 0;
+}
+
+#settings {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  margin: 0 10px 200px 5px;
+  align-items: flex-end;
+  justify-content: space-between;
+  font-size: 0.6rem;
+}
+
+#footer-settings {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 70px 0 10px;
+}
+
+#nav-settings {
+  display: flex;
+  flex-direction: row;
+  margin-top: 100px;
+
+  width: 200px;
+  width: min-content;
+  height: min-content;
+}
+
+#set-home-link {
+  background-color: #15260f;
+  height: min-content;
+}
+
+#arrow {
+  color: rgb(230, 235, 216);
+  font-size: 16px;
+  padding: 0 3px 5px 3px;
+}
+
+#nav-settings:hover {
+  box-shadow: 1px 1px 20px 8px rgba(112, 147, 178, 0.7);
+}
+
+a:visited, a:link {
+  color: rgb(242, 232, 255);
+}
+
+.set-input:placeholder-shown {
+  font-style: italic;
+}
+
+
+/* Cities-tjänsten: */
+
+.temp-table {
+  background-color: rgb(161, 247, 214);
+  border-style: dashed;
+  border-collapse: collapse;
+  border-color: rgb(254, 254, 254);
+  height: 200px;
+  font-family: Arial, sans-serif;
+  color: black;
+}
+
+.temp-input {
+  background-color: rgb(161, 247, 214);
+  border-style: none;
+  font-size: 1em;
+  font-family: Arial, sans-serif;
+}
+
+/* (ref: https://stackoverflow.com/questions/69901519/cant-change-border-color-when-input-field-is-active) --> */
+input:focus {
+  outline: none;
+  border: 2px groove rgb(255, 36, 215);
+  background-color: #ffffff;
+}
+
+input:active {
+  outline: none;
+  border: 2px groove rgb(42, 223, 251);
+  background-color: #ffffff;
+}
+
+.tempdiv-tr {
+  background-color: rgb(161, 247, 214);
+}
+
+.tr-clicked {
+  background-color: rgb(168, 98, 255);
+}
+
+.edit-choice {
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
