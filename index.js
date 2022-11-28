@@ -114,53 +114,53 @@ function fetchVtData(stationId) {
 
           // försök till fix av for-loop:
 
-          let vtext = new f();
+          // let vtext = new f();
 
-          for (let i = 0; i < 3; i++) {
-            let number;
+          // for (let i = 0; i < 3; i++) {
+          //   let number;
 
-            if (i === 0) {
-              number = "First";
-            } else if (i === 1) {
-              number = "Second";
-            } else if (i === 2) {
-              number = "Third";
-            }
+          //   if (i === 0) {
+          //     number = "First";
+          //   } else if (i === 1) {
+          //     number = "Second";
+          //   } else if (i === 2) {
+          //     number = "Third";
+          //   }
 
-            console.log("this", this);
-            console.log("hära", this["vt" + number + "DpSname"]);
+          //   console.log("this", this);
+          //   console.log("hära", this["vt" + number + "DpSname"]);
 
-            this["vt" + number + "DpSname"].textContent =
-              departureboard[i].sname;
-            this["vt" + number + "DpSname"].style.backgroundColor =
-              departureboard[i].bgColor;
-            this["vt" + number + "DpSname"].style.color =
-              departureboard[i].fgColor;
-            this["vt" + number + "DpDirection"].textContent =
-              departureboard[i].direction;
-            this["vt" + number + "DpTime"].textContent =
-              departureboard[i].rtTime;
-          }
+          //   this["vt" + number + "DpSname"].textContent =
+          //     departureboard[i].sname;
+          //   this["vt" + number + "DpSname"].style.backgroundColor =
+          //     departureboard[i].bgColor;
+          //   this["vt" + number + "DpSname"].style.color =
+          //     departureboard[i].fgColor;
+          //   this["vt" + number + "DpDirection"].textContent =
+          //     departureboard[i].direction;
+          //   this["vt" + number + "DpTime"].textContent =
+          //     departureboard[i].rtTime;
+          // }
 
           // förbättringsförslag: går antagligen att fixa en for-loop  av det här ->
 
-          // vtFirstDpSname.textContent = departureboard[0].sname;
-          // vtFirstDpSname.style.backgroundColor = departureboard[0].bgColor;
-          // vtFirstDpSname.style.color = departureboard[0].fgColor;
-          // vtFirstDpDirection.textContent = departureboard[0].direction;
-          // vtFirstDpTime.textContent = departureboard[0].rtTime;
+          vtFirstDpSname.textContent = departureboard[0].sname;
+          vtFirstDpSname.style.backgroundColor = departureboard[0].bgColor;
+          vtFirstDpSname.style.color = departureboard[0].fgColor;
+          vtFirstDpDirection.textContent = departureboard[0].direction;
+          vtFirstDpTime.textContent = departureboard[0].rtTime;
 
-          // vtSecondDpSname.textContent = departureboard[1].sname;
-          // vtSecondDpSname.style.backgroundColor = departureboard[1].bgColor;
-          // vtSecondDpSname.style.color = departureboard[1].fgColor;
-          // vtSecondDpDirection.textContent = departureboard[1].direction;
-          // vtSecondDpTime.textContent = departureboard[1].rtTime;
+          vtSecondDpSname.textContent = departureboard[1].sname;
+          vtSecondDpSname.style.backgroundColor = departureboard[1].bgColor;
+          vtSecondDpSname.style.color = departureboard[1].fgColor;
+          vtSecondDpDirection.textContent = departureboard[1].direction;
+          vtSecondDpTime.textContent = departureboard[1].rtTime;
 
-          // vtThirdDpSname.textContent = departureboard[2].sname;
-          // vtThirdDpSname.style.backgroundColor = departureboard[2].bgColor;
-          // vtThirdDpSname.style.color = departureboard[2].fgColor;
-          // vtThirdDpDirection.textContent = departureboard[2].direction;
-          // vtThirdDpTime.textContent = departureboard[2].rtTime;
+          vtThirdDpSname.textContent = departureboard[2].sname;
+          vtThirdDpSname.style.backgroundColor = departureboard[2].bgColor;
+          vtThirdDpSname.style.color = departureboard[2].fgColor;
+          vtThirdDpDirection.textContent = departureboard[2].direction;
+          vtThirdDpTime.textContent = departureboard[2].rtTime;
 
           vtStationp.textContent = departureboard[0].stop;
 
