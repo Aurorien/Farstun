@@ -70,13 +70,16 @@ animeBoxAnimeInput.setAttribute(
 ///////////////////////////////////////////////////////////////////
 // Cities-tjänsten
 
-const citiesGetButton = document.querySelector("#cities-get-button"),
+const citiesInitialGetButton = document.querySelector(
+    "#cities-initial-get-button"
+  ),
   showCities = document.getElementById("settings-cities");
 
-citiesGetButton.addEventListener("click", getCities);
+citiesInitialGetButton.addEventListener("click", getCities);
 
 let citiesPatchButton,
   citiesDeleteButton,
+  citiesGetButton,
   cityName = [];
 
 function getCities() {
@@ -131,12 +134,16 @@ function getCities() {
         postPop = document.querySelector("#post-pop"),
         citiesPostButton = document.querySelector("#cities-post-button");
       let sendName, sendPop;
+      citiesGetButton = document.querySelector("#cities-get-button");
       citiesPatchButton = document.querySelector("#cities-patch-button");
       citiesDeleteButton = document.querySelector("#cities-delete-button");
 
       citiesPostButton.disabled = true;
       citiesPatchButton.disabled = true;
       citiesDeleteButton.disabled = true;
+
+      // för att hämta igen
+      citiesGetButton.addEventListener("click", getCities);
 
       // för Lägg till-funktionen
       postName.addEventListener("input", () => {
@@ -186,7 +193,7 @@ function getCities() {
 }
 
 function onClickTr(event) {
-  // onClick samt currentTarge ref: https://stackoverflow.com/questions/68634930/how-to-get-current-td-value-from-table-onclick
+  // onClick samt currentTarget ref: https://stackoverflow.com/questions/68634930/how-to-get-current-td-value-from-table-onclick
 
   // Tänder och släcker den visuella markeringen:
   const tr = document.querySelectorAll("tr");
@@ -227,6 +234,13 @@ function onClickTr(event) {
   });
 
   citiesDeleteButton.disabled = false;
+
+  // alla id-n som har blivit klickade på raderas med nedan två lösningar,fixa så att bara den aktuella markerade staden raderas när en trycker på radera-knappen
+
+  // citiesDeleteButton.addEventListener("click", () => {
+  //   deleteCities(onClickId);
+  // });
+
   deleteCities(onClickId);
 }
 
