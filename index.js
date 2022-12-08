@@ -22,6 +22,7 @@ setInterval(clock, 1000);
 
 let vtTdDpLine = document.querySelector("#td-dp-line"),
   vtTdDpNext = document.querySelector("#td-dp-next"),
+  vtTable = document.querySelector("#vt-dp-table"),
   vtFirstDpSname = document.querySelector("#first-dp-sname"),
   vtFirstDpDirection = document.querySelector("#first-dp-direction"),
   vtFirstDpTime = document.querySelector("#first-dp-time"),
@@ -143,6 +144,13 @@ function fetchVtData(stationId) {
           // }
 
           // förbättringsförslag: går antagligen att fixa en for-loop  av det här ->
+          //tips: jobba med delar av table (som barnelement till table?)
+
+          //ex. av Albert:
+          // vtTable.foreach(()=>{
+          //   row.textContent =
+          // })
+          // vtTable.tr.td[0]
 
           vtFirstDpSname.textContent = departureboard[0].sname;
           vtFirstDpSname.style.backgroundColor = departureboard[0].bgColor;
@@ -473,25 +481,39 @@ function chartTemp(forecast) {
 ///////////////////////////////////////////////////////////////////
 // Hamburgarmeny
 
-const burger = document.querySelector("#burger-index");
+const gear = document.querySelector("#gear-index");
+
+// const burger = document.querySelector("#burger-index");
 
 function onBurgerClick() {
-  const insideBurger = document.querySelector("#link-index"),
-    burgerIndex = document.querySelector("#burger-index");
+  const insideBurger = document.querySelector("#link-index");
 
   if (insideBurger.style.display === "block") {
     insideBurger.style.display = "none";
-    burgerIndex.setAttribute("class", "bi bi-list");
-    // alternativt (ref: kursens Live-kodning):
-    // burgerIndex.classList.remove("bi-x-lg");
-    // burgerIndex.classList.add("bi-list");
   } else {
     insideBurger.style.display = "block";
-    burgerIndex.setAttribute("class", "bi bi-x-lg");
-    // alternativt:
-    // burgerIndex.classList.remove("bi-list");
-    // burgerIndex.classList.add("bi-x-lg");
   }
 }
 
-burger.addEventListener("click", onBurgerClick);
+// function onBurgerClick() {
+//   const insideBurger = document.querySelector("#link-index"),
+//     burgerIndex = document.querySelector("#burger-index");
+
+//   if (insideBurger.style.display === "block") {
+//     insideBurger.style.display = "none";
+//     burgerIndex.setAttribute("class", "bi bi-list");
+//     // alternativt (ref: kursens Live-kodning):
+//     // burgerIndex.classList.remove("bi-x-lg");
+//     // burgerIndex.classList.add("bi-list");
+//   } else {
+//     insideBurger.style.display = "block";
+//     burgerIndex.setAttribute("class", "bi bi-x-lg");
+//     // alternativt:
+//     // burgerIndex.classList.remove("bi-list");
+//     // burgerIndex.classList.add("bi-x-lg");
+//   }
+// }
+
+// burger.addEventListener("click", onBurgerClick);
+
+// gear.addEventListener("click", onBurgerClick);
