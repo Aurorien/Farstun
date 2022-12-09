@@ -12,7 +12,7 @@ vtButtonStop.addEventListener("click", () => {
 
 vtInputStop.setAttribute(
   "placeholder",
-  `Nuvarande: ${localStorage.getItem("vtInputStop")}`
+  `${localStorage.getItem("vtInputStop")}...`
 );
 
 ///////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ weatherPlaceButton.addEventListener("click", () => {
 
 weatherPlaceInput.setAttribute(
   "placeholder",
-  `Nuvarande: ${localStorage.getItem("weatherPlace")}`
+  `${localStorage.getItem("weatherPlace")}...`
 );
 
 ///////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ animeBoxAnimeButton.addEventListener("click", () => {
 
 animeBoxAnimeInput.setAttribute(
   "placeholder",
-  `Nuvarande: ${localStorage.getItem("animeBoxAnime")}`
+  `${localStorage.getItem("animeBoxAnime")}...`
 );
 
 ///////////////////////////////////////////////////////////////////
