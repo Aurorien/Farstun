@@ -1,7 +1,48 @@
 ///////////////////////////////////////////////////////////////////
+//ALLMÄNNA FUNKTIONER:
+
+// gör array-värden till li-element och lägger in dem i en ul som finns i html och sedan kan en göra val genom att klicka i listan
+function dropdownSuggestions(array, list, input, button) {
+  console.log("JAJAJAJA");
+  list.innerHTML = "";
+  let innerText = "";
+  array.forEach((arrayValue) => {
+    innerText += `
+      <li class="dropdown">${arrayValue}</li>`;
+    console.log("ArrayValue", arrayValue);
+  });
+
+  list.innerHTML = innerText;
+  list.style.display = "block";
+  list.addEventListener("click", (event) => {
+    const value = event.target.innerText;
+    console.log("VALUE", event);
+    input.value = value;
+    list.style.display = "none";
+    button.disabled = false;
+  });
+}
+
+// filtrerar ut värden ur arrayen som innehåller inputvärdet
+function filterSearch(array, searchInput) {
+  return array.filter((x) =>
+    x.toLowerCase().includes(searchInput.toLowerCase())
+  );
+}
+
+//Hämta-knappen ska vara disabled när en ändrar i inputfältet (tills att en väljer något i dropdown, då blir den enabled)
+
+///////////////////////////////////////////////////////////////////
 //FÖR ATT ÄNDRA I VÄSTTRAFIK:
 const vtInputStop = document.querySelector("#stop-name"),
   vtButtonStop = document.querySelector("#stop-name-button");
+
+// vtInputStop.addEventListener("input", () => {
+//   vtButtonStop.disabled = true;
+//   if (vtInputStop.value.length > 2) {
+//     const filteredSearch = filterSearch(vtList, vtInputStop.value);
+//   }
+// });
 
 vtButtonStop.addEventListener("click", () => {
   // console.log("VtButton", vtInputStop.value);
@@ -10,9 +51,10 @@ vtButtonStop.addEventListener("click", () => {
   vtInputStop.value = null;
 });
 
+const phVt = localStorage.getItem("vtInputStop");
 vtInputStop.setAttribute(
   "placeholder",
-  `${localStorage.getItem("vtInputStop")}...`
+  `${phVt[0].toUpperCase()}${phVt.slice(1).toLowerCase()}...`
 );
 
 ///////////////////////////////////////////////////////////////////
@@ -28,17 +70,138 @@ weatherPlaceButton.addEventListener("click", () => {
   weatherPlaceInput.value = null;
 });
 
+const phWeather = localStorage.getItem("weatherPlace");
 weatherPlaceInput.setAttribute(
   "placeholder",
-  `${localStorage.getItem("weatherPlace")}...`
+  `${phWeather[0].toUpperCase()}${phWeather.slice(1).toLowerCase()}...`
 );
 
 ///////////////////////////////////////////////////////////////////
 //FÖR ATT ÄNDRA I ANIME:
+// ref. autocomplete-funktion med dropdown: https://www.youtube.com/watch?v=OPnPqc9YWSA
 //API'ns info-webbsida: https://animechan.vercel.app/
 
+const animeList = [
+  "Fullmetal Alchemist",
+  "Death Note",
+  "Cowboy Bebop",
+  "Spirited Away",
+  "Princess Mononoke",
+  "Pokémon",
+  "(The) Melancholy of Haruhi Suzumiya",
+  "Elfen Lied",
+  "Neon Genesis Evangelion",
+  "Code Geass: Lelouch of the Rebellion",
+  "Bleach",
+  "Code Geass: Lelouch of the Rebellion R2",
+  "FLCL",
+  "Naruto",
+  "Samurai Champloo",
+  "Trigun",
+  "Gurren Lagann",
+  "Rurouni Kenshin: Trust & Betrayal",
+  "Howl's Moving Castle",
+  "movFull Metal Panic!",
+  "Ouran High School Host Club",
+  "Fullmetal Alchemist: Brotherhood",
+  "Clannad",
+  "Fruits Basket",
+  "Akira",
+  "Cowboy Bebop: The MoChobits",
+  "Full Metal Panic? Fumoffu",
+  "5 Centimeters Per Second",
+  "Rurouni Kenshin",
+  "(The) Girl Who Leapt Through Time",
+  "Ghost in the Shell",
+  "Clannad After Story",
+  "Hellsing",
+  "Final Fantasy VII: Advent Children",
+  "Azumanga Daioh",
+  "Fullmetal Alchemist: The Movie - Conqueror of Shamba",
+  "Ghost in the Shell: Stand Alone Complex",
+  "Nausicaä of the Valley of the Wind",
+  "Mushi-Shi",
+  "Darker than Black",
+  "Fate/stay night",
+  "Steins;Gate",
+  "Claymore",
+  "Toradora!",
+  "Inuyasha",
+  "Castle in the Sky",
+  "Full Metal Panic! The Second Raid",
+  "Black Lagoon",
+  "Blood+",
+  "Angel Beats!",
+  "Neon Genesis Evangelion: The End of Evangelion",
+  "My Neighbor Totoro",
+  "Grave of the Fireflies",
+  "Dragon Ball Z",
+  "Eureka Seven",
+  "Air",
+  "Love Hina",
+  "Berserk",
+  "Last Exile",
+  "When They Cry - Higurashi",
+  "GTO: Great Teacher Onizuka",
+  "Baccano!",
+  "Wolf's Rain",
+  "Welcome to the NHK",
+  "Sword Art Online",
+  "Serial Experiments Lain",
+  "Shakugan no Shana",
+  "Haibane Renmei",
+  "One Piece",
+  "Attack on Titan",
+  "Kiki's Delivery Service",
+  "Naruto Shippūden",
+  "(The) Vision of Escaflowne",
+  "Samurai 7",
+  "Soul Eater",
+  "Ergo Proxy",
+  "Black Lagoon: The Second Barrage",
+  "School Rumble",
+  "Spice and Wolf",
+  "Lucky Star",
+  "Eden of the East",
+  "Kanon",
+  "Gungrave",
+  "Dragon Ball",
+  "Puella Magi Madoka Magica",
+  "Monster",
+  "High School of the Dead",
+  "Summer Wars",
+  "Chrono Crusade",
+  "Bakemonogatari",
+  "anohana: The Flower We Saw That Day",
+  "Gunslinger Girl",
+  "Lunar Legend Tsukihime",
+  "(The) Familiar of Zero",
+  "R.O.D -The Read or Die",
+  "Yu Yu Hakusho: Ghost Files",
+  "Mobile Suit Gundam Seed",
+  "Durarara!!",
+  "Paranoia Agent",
+];
+
 let animeBoxAnimeInput = document.querySelector("#set-anime"),
-  animeBoxAnimeButton = document.querySelector("#set-anime-button");
+  animeBoxAnimeButton = document.querySelector("#set-anime-button"),
+  animeSuggUl = document.querySelector("#anime-sugglist");
+
+//efter den här har kört syns en dropdown-lista med de utfiltrerade arrayvärdena
+animeBoxAnimeInput.addEventListener("input", () => {
+  animeBoxAnimeButton.disabled = true;
+  if (animeBoxAnimeInput.value.length > 2) {
+    const filteredSearch = filterSearch(animeList, animeBoxAnimeInput.value);
+    dropdownSuggestions(
+      filteredSearch,
+      animeSuggUl,
+      animeBoxAnimeInput,
+      animeBoxAnimeButton
+    );
+  } else {
+    animeSuggUl.style.display = "none";
+  }
+});
 
 function fetchAnimeBox(search) {
   let getAnime = encodeURIComponent(search);
@@ -57,15 +220,49 @@ function fetchAnimeBox(search) {
     });
 }
 
+console.log("Värde", animeBoxAnimeInput.value);
+
 animeBoxAnimeButton.addEventListener("click", () => {
   fetchAnimeBox(animeBoxAnimeInput.value);
   // console.log(animeBoxAnimeInput.value);
 });
 
+const phAnime = localStorage.getItem("animeBoxAnime");
 animeBoxAnimeInput.setAttribute(
   "placeholder",
-  `${localStorage.getItem("animeBoxAnime")}...`
+  `${phAnime[0].toUpperCase()}${phAnime.slice(1).toLowerCase()}...`
 );
+
+// let animeBoxAnimeInput = document.querySelector("#set-anime"),
+//   animeBoxAnimeButton = document.querySelector("#set-anime-button");
+
+// function fetchAnimeBox(search) {
+//   let getAnime = encodeURIComponent(search);
+//   // console.log(getAnime);
+//   fetch(`https://animechan.vercel.app/api/random/anime?title=${getAnime}`)
+//     .then((response) => response.json())
+//     .then((quote) => {
+//       console.log(quote);
+//       localStorage.setItem(
+//         "animeBoxQuote",
+//         `${quote.quote}  -- ${quote.character}  (${quote.anime})`
+//       );
+//       localStorage.setItem("animeBoxAnime", search);
+//       animeBoxAnimeInput.value = null;
+//       location.reload();
+//     });
+// }
+
+// animeBoxAnimeButton.addEventListener("click", () => {
+//   fetchAnimeBox(animeBoxAnimeInput.value);
+//   // console.log(animeBoxAnimeInput.value);
+// });
+
+// const phAnime = localStorage.getItem("animeBoxAnime");
+// animeBoxAnimeInput.setAttribute(
+//   "placeholder",
+//   `${phAnime[0].toUpperCase()}${phAnime.slice(1).toLowerCase()}...`
+// );
 
 ///////////////////////////////////////////////////////////////////
 // Cities-tjänsten
