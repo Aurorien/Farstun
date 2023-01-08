@@ -79,6 +79,42 @@ a:visited, a:link {
   font-style: italic;
 }
 
+#settings-anime {
+  display: flex;
+}
+
+#anime-label {
+  padding: 7px 10px 0 0;
+}
+
+.sugg {
+ width: 160px;
+ position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  display: none;
+  list-style-type: none;
+  margin: 0;
+  padding-bottom: 14px;
+  padding-left: 7px;
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  overflow-y: auto;
+  width: 142px;
+  height: 50px;
+}
+
+#anime-sugglist li {
+  margin-top: 0;
+  color: black;
+  padding-top: 15px;
+  /* width: calc(100%-30px); */
+  cursor: pointer;
+}
+
 
 /* Cities-tjänsten: */
 

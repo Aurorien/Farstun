@@ -42,6 +42,8 @@ let vtTdDpLine = document.querySelector("#td-dp-line"),
 //hämtar station via input av namnet
 function fetchStation(stationName) {
   // console.log("Hallå " + stationName + "(i fetchStation)");
+
+  // encodar tecken så att de fungerar i sökparameter
   const stopName = encodeURIComponent(stationName);
 
   fetch("https://api.vasttrafik.se/token", {

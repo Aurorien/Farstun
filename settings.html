@@ -18,12 +18,15 @@
         <label for="set-weather-place"
           >Väder- Ändra stad i Västra Götaland:</label
         >
-        <input
-          class="set-input"
-          id="set-weather-place"
-          placeholder=""
-          type="text"
-        />
+        <div class="sugg">
+          <input
+            class="set-input"
+            id="set-weather-place"
+            placeholder=""
+            type="text"
+          />
+          <ul class="dropdown" id="weather-sugglist"></ul>
+        </div>
         <input
           class="set-button"
           id="set-weather-place-button"
@@ -32,8 +35,11 @@
         />
       </div>
       <div class="set" id="settings-anime">
-        <label for="set-anime">Citat- Ändra anime:</label>
-        <input class="set-input" id="set-anime" placeholder="" type="text" />
+        <label for="set-anime" id="anime-label">Citat- Ändra anime:</label>
+        <div class="sugg">
+          <input class="set-input" id="set-anime" placeholder="" type="text" />
+          <ul class="dropdown" id="anime-sugglist"></ul>
+        </div>
         <input
           class="set-button"
           id="set-anime-button"
@@ -45,7 +51,10 @@
         <label for="stop-name"
           >Västtrafik Avgångstavla- Ändra hållplats i Västra Götaland:</label
         >
-        <input class="set-input" id="stop-name" placeholder="" type="text" />
+        <div class="sugg">
+          <input class="set-input" id="stop-name" placeholder="" type="text" />
+          <ul class="dropdown" id="vt-sugglist"></ul>
+        </div>
         <input
           class="set-button"
           id="stop-name-button"
