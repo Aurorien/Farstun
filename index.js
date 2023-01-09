@@ -33,54 +33,19 @@ let vtTdDpLine = document.querySelector("#td-dp-line"),
   vtThirdDpDirection = document.querySelector("#third-dp-direction"),
   vtThirdDpTime = document.querySelector("#third-dp-time"),
   vtStationp = document.querySelector("#vt-station-p"),
-  departureboard,
-  stopId;
+  departureboard;
 /// för uppdatering av avgångstavlan med knappar:
 // vtDpButton = document.querySelector("#vt-dp-button"),
 // vtDpButtonStop = document.querySelector("#vt-dp-button-stop"), ///
 
-//hämtar station via input av namnet
-function fetchStation(stationName) {
-  // console.log("Hallå " + stationName + "(i fetchStation)");
-
-  // encodar tecken så att de fungerar i sökparameter
-  const stopName = encodeURIComponent(stationName);
-
-  fetch("https://api.vasttrafik.se/token", {
-    body: "grant_type=client_credentials&scope=0",
-    headers: {
-      Authorization:
-        "Basic MEVvUWFJNW9lbVVLajYwdWM2M3F5OUlDdlpJYTpxaXFUZWg4eFlmV0ZVMDAwMFBMYmZYSU1zeDhh",
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    method: "POST",
-  })
-    .then((response) => response.json())
-    .then((result) => {
-      fetch(
-        `https://api.vasttrafik.se/bin/rest.exe/v2/location.name?input=${stopName}&format=json`,
-        {
-          headers: {
-            Authorization: `Bearer ${result.access_token}`,
-          },
-        }
-      )
-        .then((response) => response.json())
-        .then((result) => {
-          console.log("fetchStation Resultat", result);
-          stopId = result.LocationList.StopLocation[0].id;
-          localStorage.setItem("saveStop", stopId);
-          fetchVtData(stopId);
-        });
-    });
-}
-
 function fetchVtData(stationId) {
   // console.log("fetchData stationId:", JSON.stringify(stationId));
 
-  if (stationId === null && localStorage.getItem("saveStop") === null) {
+  if (stationId === null && localStorage.getItem("vtInputStopId") === null) {
     stationId = "9021014004940000";
   }
+
+  console.log("STATIONid", stationId);
 
   // Hämtar aktuellt datum och tid
   let date = new Date(),
@@ -111,7 +76,7 @@ function fetchVtData(stationId) {
       )
         .then((response) => response.json())
         .then((result) => {
-          // console.log("fetchData Resultat", result);
+          console.log("fetchData Resultat", result);
           departureboard = result.DepartureBoard.Departure;
           console.log("Västtrafik", departureboard);
 
@@ -181,20 +146,11 @@ function fetchVtData(stationId) {
 }
 
 //kör fetchStation-funktionen:
-let xstation;
 
-if (localStorage.getItem("vtInputStop") !== null) {
-  xstation = localStorage.getItem("vtInputStop");
-} else {
-  xstation = "Nils Ericsson Terminalen";
-  localStorage.setItem("vtInputStop", xstation);
-}
-
-fetchStation(xstation);
-
+fetchVtData(localStorage.getItem("vtInputStopId"));
 //uppdaterar avgångstavlan i intervall:
 setInterval(() => {
-  fetchVtData(localStorage.getItem("saveStop"));
+  fetchVtData(localStorage.getItem("vtInputStopId"));
 }, 15000);
 
 //ALTERNATIVA VISNINGAR/UPPDATERINGAR AV AVGÅNGSTAVLAN:
