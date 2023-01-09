@@ -92,7 +92,31 @@ a:visited, a:link {
  position: relative;
 }
 
-.dropdown {
+#vt-sugglist, #weather-sugglist, #anime-sugglist  {
+  position: absolute;
+  display: none;
+  list-style-type: none;
+  margin: 0;
+  padding-bottom: 14px;
+  padding-left: 7px;
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  overflow-y: auto;
+  width: 142px;
+  height: 50px;
+}
+
+#vt-sugglist li, #weather-sugglist li, #anime-sugglist li {
+  margin-top: 0;
+  color: black;
+  padding-top: 15px;
+  /* width: calc(100%-30px); */
+  cursor: pointer;
+}
+
+
+#vt-sugglist, #weather-sugglist, #anime-sugglist  {
   position: absolute;
   display: none;
   list-style-type: none;

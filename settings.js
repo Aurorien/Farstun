@@ -1,64 +1,212 @@
 ///////////////////////////////////////////////////////////////////
-//ALLMÄNNA FUNKTIONER:
+//General functions:
 
-// gör array-värden till li-element och lägger in dem i en ul som finns i html och sedan kan en göra val genom att klicka i listan
+// Makes array values to li elements and put them in an ul that exists in the htlm, and then one can make choices by clicking in the dropdown list
 function dropdownSuggestions(array, list, input, button) {
-  console.log("JAJAJAJA");
+  // console.log("JAJAJAJA");
   list.innerHTML = "";
   let innerText = "";
   array.forEach((arrayValue) => {
     innerText += `
       <li class="dropdown">${arrayValue}</li>`;
-    console.log("ArrayValue", arrayValue);
+    // console.log("ArrayValue", arrayValue);
   });
 
   list.innerHTML = innerText;
   list.style.display = "block";
   list.addEventListener("click", (event) => {
     const value = event.target.innerText;
-    console.log("VALUE", event);
+    // console.log("VALUE", event);
     input.value = value;
     list.style.display = "none";
     button.disabled = false;
   });
 }
 
-// filtrerar ut värden ur arrayen som innehåller inputvärdet
+// Filters out, from an array, the values that include the input value
 function filterSearch(array, searchInput) {
   return array.filter((x) =>
     x.toLowerCase().includes(searchInput.toLowerCase())
   );
 }
 
-//Hämta-knappen ska vara disabled när en ändrar i inputfältet (tills att en väljer något i dropdown, då blir den enabled)
-
-///////////////////////////////////////////////////////////////////
-//FÖR ATT ÄNDRA I VÄSTTRAFIK:
-const vtInputStop = document.querySelector("#stop-name"),
-  vtButtonStop = document.querySelector("#stop-name-button");
-
-// vtInputStop.addEventListener("input", () => {
-//   vtButtonStop.disabled = true;
-//   if (vtInputStop.value.length > 2) {
-//     const filteredSearch = filterSearch(vtList, vtInputStop.value);
-//   }
-// });
-
-vtButtonStop.addEventListener("click", () => {
-  // console.log("VtButton", vtInputStop.value);
-  localStorage.setItem("vtInputStop", vtInputStop.value);
-  location.reload();
-  vtInputStop.value = null;
+// Hides the dropdown when one clicks outside of it
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".dropdown")) {
+    const dropdown = document.querySelectorAll(".dropdown");
+    // console.log("DROPDOWN", dropdown);
+    for (let i = 0; i < dropdown.length; i++) {
+      if ((dropdown[i].style.display = "block")) {
+        dropdown[i].style.display = "none";
+      }
+    }
+  }
 });
 
-const phVt = localStorage.getItem("vtInputStop");
+///////////////////////////////////////////////////////////////////
+//Settings Västtrafik:
+
+let stopId;
+const vtInputStop = document.querySelector("#stop-name"),
+  vtButtonStop = document.querySelector("#stop-name-button"),
+  vtSuggUl = document.querySelector("#vt-sugglist");
+let filteredList;
+
+//get station by input name
+function fetchStation(stationName) {
+  console.log("Hallå " + stationName + "(i fetchStation)");
+
+  // encode characters the so they work in query param
+  const stopName = encodeURIComponent(stationName);
+
+  fetch("https://api.vasttrafik.se/token", {
+    body: "grant_type=client_credentials&scope=0",
+    headers: {
+      Authorization:
+        "Basic MEVvUWFJNW9lbVVLajYwdWM2M3F5OUlDdlpJYTpxaXFUZWg4eFlmV0ZVMDAwMFBMYmZYSU1zeDhh",
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: "POST",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      fetch(
+        `https://api.vasttrafik.se/bin/rest.exe/v2/location.name?input=${stopName}&format=json`,
+        {
+          headers: {
+            Authorization: `Bearer ${result.access_token}`,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          console.log("fetchStation Resultat", result);
+          let stopArray = [];
+          console.log(
+            "IDDDDD",
+            result.LocationList.StopLocation[0].id.slice(0, 13)
+          );
+
+          //avoids general places that cannot show as one station
+          for (let i = 0; i < 3; i++) {
+            if (
+              result.LocationList.StopLocation[i].id.slice(0, 14) !==
+              "00000008000000"
+            ) {
+              stopArray.push(result.LocationList.StopLocation[i]);
+            }
+          }
+          console.log("STOParray", stopArray);
+
+          const selectedKeys = ["name", "id"];
+
+          filteredList = stopArray.map((obj) =>
+            selectedKeys.reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {})
+          );
+
+          console.log("FILTERED", filteredList);
+
+          ////////////////////////////////
+          // ref varianter och exempel från ChatGPT, filter() vs. reduce()
+          // const originalList = [
+          //   { name: "Alice" },
+          //   { age: 25 },
+          //   { gender: "female" },
+          //   { name: "Bob" },
+          //   { age: 30 },
+          //   { gender: "male" },
+          //   { name: "Claire" },
+          //   { age: 35 },
+          //   { gender: "female" },
+          //   { name: "David" },
+          //   { age: 40 },
+          //   { gender: "male" },
+          // ];
+
+          // console.log("ORIGINAL", originalList);
+
+          // const selectedKeys = ["name", "age"];
+
+          // const filteredList = originalList.filter((obj) => {
+          //   return selectedKeys.some((key) => obj.hasOwnProperty(key));
+          // });
+
+          // console.log("FILTERED", filteredList);
+
+          // const originalList = [
+          //   { name: "Alice", age: 25, gender: "female" },
+          //   { name: "Bob", age: 30, gender: "male" },
+          //   { name: "Claire", age: 35, gender: "female" },
+          //   { name: "David", age: 40, gender: "male" },
+          // ];'
+
+          // const selectedKeys = ["name", "age"];
+
+          // const filteredList = originalList.map((obj) =>
+          //   selectedKeys.reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {})
+          // );
+
+          // console.log(filteredList);
+          ////////////////////////////////
+
+          let filtArray = [];
+
+          filteredList.forEach((obj) => {
+            filtArray.push(obj.name);
+          });
+
+          console.log("PUSH", filtArray);
+          console.log("VTinputSTOP", vtInputStop);
+
+          dropdownSuggestions(filtArray, vtSuggUl, vtInputStop, vtButtonStop);
+        });
+    });
+}
+
+vtInputStop.addEventListener("input", () => {
+  vtButtonStop.disabled = true;
+  if (vtInputStop.value.length > 2) {
+    fetchStation(vtInputStop.value);
+  }
+});
+
+// console.log("VTInputStopppp", vtInputStop.value);
+
+vtButtonStop.addEventListener("click", () => {
+  console.log("VtButton", vtInputStop.value);
+  // look for the object in filteredList whoose key name has the same value as vtInputStop.value and fronm that object get the value of the key id.
+  const vtObjectSelected = filteredList.filter((obj) =>
+    vtInputStop.value.includes(obj.name)
+  );
+  console.log("vtObjectSelected", vtObjectSelected[0].id);
+
+  localStorage.setItem("vtInputStopId", vtObjectSelected[0].id);
+  localStorage.setItem("vtInputStop", vtInputStop.value);
+  vtInputStop.value = null;
+  location.reload();
+});
+
+const lsVt = localStorage.getItem("vtInputStop");
 vtInputStop.setAttribute(
   "placeholder",
-  `${phVt[0].toUpperCase()}${phVt.slice(1).toLowerCase()}...`
+  `${lsVt[0].toUpperCase()}${lsVt.slice(1).toLowerCase()}...`
 );
 
+// fetchStation(lsVt);
+// //run the fetchStation-function:
+// let xstation;
+
+// if (localStorage.getItem("vtInputStopId") !== null) {
+//   xstation = localStorage.getItem("vtInputStopId");
+// } else {
+//   xstation = "Nils Ericsson Terminalen";
+//   localStorage.setItem("vtInputStopId", xstation);
+// }
+
+// fetchStation(xstation);
+
 ///////////////////////////////////////////////////////////////////
-//FÖR ATT ÄNDRA I VÄDER:
+//Settings Weather:
 
 const weatherPlaceInput = document.querySelector("#set-weather-place"),
   weatherPlaceButton = document.querySelector("#set-weather-place-button");
@@ -77,9 +225,9 @@ weatherPlaceInput.setAttribute(
 );
 
 ///////////////////////////////////////////////////////////////////
-//FÖR ATT ÄNDRA I ANIME:
-// ref. autocomplete-funktion med dropdown: https://www.youtube.com/watch?v=OPnPqc9YWSA
-//API'ns info-webbsida: https://animechan.vercel.app/
+//Settings Anime quotes:
+// ref. autocomplete-function with dropdown: https://www.youtube.com/watch?v=OPnPqc9YWSA
+//the API info webpage: https://animechan.vercel.app/
 
 const animeList = [
   "Fullmetal Alchemist",
@@ -187,7 +335,6 @@ let animeBoxAnimeInput = document.querySelector("#set-anime"),
   animeBoxAnimeButton = document.querySelector("#set-anime-button"),
   animeSuggUl = document.querySelector("#anime-sugglist");
 
-//efter den här har kört syns en dropdown-lista med de utfiltrerade arrayvärdena
 animeBoxAnimeInput.addEventListener("input", () => {
   animeBoxAnimeButton.disabled = true;
   if (animeBoxAnimeInput.value.length > 2) {
@@ -202,6 +349,7 @@ animeBoxAnimeInput.addEventListener("input", () => {
     animeSuggUl.style.display = "none";
   }
 });
+console.log("AAANIMEEE", animeBoxAnimeInput.value);
 
 function fetchAnimeBox(search) {
   let getAnime = encodeURIComponent(search);
@@ -339,10 +487,10 @@ function getCities() {
       citiesPatchButton.disabled = true;
       citiesDeleteButton.disabled = true;
 
-      // för att hämta igen
+      // to get again
       citiesGetButton.addEventListener("click", getCities);
 
-      // för Lägg till-funktionen
+      // for the Lägg till-function
       postName.addEventListener("input", () => {
         if (
           postName.value.trim() !== "" &&
@@ -371,7 +519,7 @@ function getCities() {
         postCities(sendName, Number(sendPop));
       });
 
-      // för Redigera-funktionen
+      // for the Redigera-function
       citiesPatchButton.addEventListener("click", () => {
         const trVarNodes = document.querySelectorAll(".tempdiv-tr");
 
@@ -392,14 +540,14 @@ function getCities() {
 function onClickTr(event) {
   // onClick samt currentTarget ref: https://stackoverflow.com/questions/68634930/how-to-get-current-td-value-from-table-onclick
 
-  // Tänder och släcker den visuella markeringen:
+  // Turns on and shuts of the visual marking/highlight
   const tr = document.querySelectorAll("tr");
   tr.forEach((element) => {
     element.classList.remove("tr-clicked");
   });
   event.currentTarget.classList.add("tr-clicked");
 
-  // Namn och befolkning:
+  // Name and population:
   let onClickId = event.currentTarget.children[0].textContent,
     onClickName = event.currentTarget.children[1].children[0],
     patchName = event.currentTarget.children[1].children[0].value,
@@ -432,7 +580,7 @@ function onClickTr(event) {
 
   citiesDeleteButton.disabled = false;
 
-  // alla id-n som har blivit klickade på raderas med nedan två lösningar,fixa så att bara den aktuella markerade staden raderas när en trycker på radera-knappen
+  // every id that has been clicked gets erased in theese two solutions below, fix so only the actual clicked city gets erased when one click the erase button
 
   // citiesDeleteButton.addEventListener("click", () => {
   //   deleteCities(onClickId);
