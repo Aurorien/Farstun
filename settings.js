@@ -1,9 +1,8 @@
 ///////////////////////////////////////////////////////////////////
 //General functions:
 
-// Makes array values to li elements and put them in an ul that exists in the htlm, and then one can make choices by clicking in the dropdown list
+// Makes array values to li elements and put them in an ul that exists in the html, and then one can make choices by clicking in the dropdown list
 function dropdownSuggestions(array, list, input, button) {
-  // console.log("JAJAJAJA");
   list.innerHTML = "";
   let innerText = "";
   array.forEach((arrayValue) => {
@@ -24,6 +23,7 @@ function dropdownSuggestions(array, list, input, button) {
 }
 
 // Filters out, from an array, the values that include the input value
+//(only used so far in the Settings anime quotes)
 function filterSearch(array, searchInput) {
   return array.filter((x) =>
     x.toLowerCase().includes(searchInput.toLowerCase())
@@ -50,7 +50,9 @@ let stopId;
 const vtInputStop = document.querySelector("#stop-name"),
   vtButtonStop = document.querySelector("#stop-name-button"),
   vtSuggUl = document.querySelector("#vt-sugglist");
-let filteredList;
+let filteredstopArray;
+
+vtButtonStop.disabled = true;
 
 //get station by input name
 function fetchStation(stationName) {
@@ -80,85 +82,46 @@ function fetchStation(stationName) {
       )
         .then((response) => response.json())
         .then((result) => {
-          console.log("fetchStation Resultat", result);
+          // console.log("fetchStation Resultat", result);
+
           let stopArray = [];
-          console.log(
-            "IDDDDD",
-            result.LocationList.StopLocation[0].id.slice(0, 13)
+
+          //avoids general places id that cannot show as one station
+          const firstFourStopLocations = result.LocationList.StopLocation.slice(
+            0,
+            4
+          );
+          const filteredStopLocations = firstFourStopLocations.filter(
+            (location) => location.id.slice(0, 14) !== "00000008000000"
           );
 
-          //avoids general places that cannot show as one station
-          for (let i = 0; i < 3; i++) {
-            if (
-              result.LocationList.StopLocation[i].id.slice(0, 14) !==
-              "00000008000000"
-            ) {
-              stopArray.push(result.LocationList.StopLocation[i]);
-            }
-          }
-          console.log("STOParray", stopArray);
+          stopArray.push(...filteredStopLocations);
+          // console.log("STOParray", stopArray);
 
+          //makes a list of object filtered to only the keys and values needed
           const selectedKeys = ["name", "id"];
 
-          filteredList = stopArray.map((obj) =>
+          filteredstopArray = stopArray.map((obj) =>
             selectedKeys.reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {})
           );
 
-          console.log("FILTERED", filteredList);
+          // console.log("FILTERED", filteredstopArray);
 
-          ////////////////////////////////
-          // ref varianter och exempel från ChatGPT, filter() vs. reduce()
-          // const originalList = [
-          //   { name: "Alice" },
-          //   { age: 25 },
-          //   { gender: "female" },
-          //   { name: "Bob" },
-          //   { age: 30 },
-          //   { gender: "male" },
-          //   { name: "Claire" },
-          //   { age: 35 },
-          //   { gender: "female" },
-          //   { name: "David" },
-          //   { age: 40 },
-          //   { gender: "male" },
-          // ];
+          let filtList = [];
 
-          // console.log("ORIGINAL", originalList);
-
-          // const selectedKeys = ["name", "age"];
-
-          // const filteredList = originalList.filter((obj) => {
-          //   return selectedKeys.some((key) => obj.hasOwnProperty(key));
-          // });
-
-          // console.log("FILTERED", filteredList);
-
-          // const originalList = [
-          //   { name: "Alice", age: 25, gender: "female" },
-          //   { name: "Bob", age: 30, gender: "male" },
-          //   { name: "Claire", age: 35, gender: "female" },
-          //   { name: "David", age: 40, gender: "male" },
-          // ];'
-
-          // const selectedKeys = ["name", "age"];
-
-          // const filteredList = originalList.map((obj) =>
-          //   selectedKeys.reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {})
-          // );
-
-          // console.log(filteredList);
-          ////////////////////////////////
-
-          let filtArray = [];
-
-          filteredList.forEach((obj) => {
-            filtArray.push(obj.name);
+          filteredstopArray.forEach((obj) => {
+            filtList.push(obj.name);
           });
 
-          console.log("PUSH", filtArray);
-          console.log("VTinputSTOP", vtInputStop);
+          //makes so it's always three in the list that will be sent to the dropdownfunction and displayed in the dropdown
+          if (filtList.length > 3) {
+            filtList = filtList.slice(0, 3);
+          }
 
-          dropdownSuggestions(filtArray, vtSuggUl, vtInputStop, vtButtonStop);
+          // console.log("PUSH", filtList);
+          // console.log("VTinputSTOP", vtInputStop);
+
+          dropdownSuggestions(filtList, vtSuggUl, vtInputStop, vtButtonStop);
         });
     });
 }
@@ -174,8 +137,8 @@ vtInputStop.addEventListener("input", () => {
 
 vtButtonStop.addEventListener("click", () => {
   console.log("VtButton", vtInputStop.value);
-  // look for the object in filteredList whoose key name has the same value as vtInputStop.value and fronm that object get the value of the key id.
-  const vtObjectSelected = filteredList.filter((obj) =>
+  // look for the object in filteredstopArray whoose key name has the same value as vtInputStop.value and fronm that object get the value of the key id.
+  const vtObjectSelected = filteredstopArray.filter((obj) =>
     vtInputStop.value.includes(obj.name)
   );
   console.log("vtObjectSelected", vtObjectSelected[0].id);
@@ -186,43 +149,94 @@ vtButtonStop.addEventListener("click", () => {
   location.reload();
 });
 
-const lsVt = localStorage.getItem("vtInputStop");
-vtInputStop.setAttribute(
-  "placeholder",
-  `${lsVt[0].toUpperCase()}${lsVt.slice(1).toLowerCase()}...`
-);
-
-// fetchStation(lsVt);
-// //run the fetchStation-function:
-// let xstation;
-
-// if (localStorage.getItem("vtInputStopId") !== null) {
-//   xstation = localStorage.getItem("vtInputStopId");
-// } else {
-//   xstation = "Nils Ericsson Terminalen";
-//   localStorage.setItem("vtInputStopId", xstation);
-// }
-
-// fetchStation(xstation);
+if (localStorage.getItem("vtInputStop")) {
+  const lsVt = localStorage.getItem("vtInputStop");
+  vtInputStop.setAttribute(
+    "placeholder",
+    localStorage.getItem("vtInputStop")
+    // `${lsVt[0].toUpperCase()}${lsVt.slice(1).toLowerCase()}...`
+  );
+} else {
+  localStorage.setItem("vtInputStop", "Nils Ericson Terminalen, Göteborg");
+}
 
 ///////////////////////////////////////////////////////////////////
 //Settings Weather:
+// getting geocoding by https://papilite.se/
 
 const weatherPlaceInput = document.querySelector("#set-weather-place"),
-  weatherPlaceButton = document.querySelector("#set-weather-place-button");
+  weatherPlaceButton = document.querySelector("#set-weather-place-button"),
+  weatherSuggUl = document.querySelector("#weather-sugglist");
+let placeArray = [];
+
+weatherPlaceButton.disabled = true;
+
+function fetchLocation(place) {
+  const locationName = encodeURIComponent(place);
+  fetch(
+    `https://api.papapi.se/lite/?query=${locationName}&format=json&apikey=***REMOVED***`
+  )
+    .then((response) => response.json())
+    .then((result) => {
+      console.log("LocationFetch", result);
+      placeArray = result.results.filter((item, index) => {
+        const check =
+          result.results.findIndex(
+            (elem) => elem.city === item.city && elem.county === item.county
+          ) === index;
+        return check;
+      });
+
+      console.log("PLACEarray", placeArray);
+
+      let placeList = [];
+
+      placeArray.forEach((obj) => {
+        placeList.push(`${obj.city}, ${obj.county}`);
+      });
+
+      console.log("PLACElist", placeList);
+
+      dropdownSuggestions(
+        placeList,
+        weatherSuggUl,
+        weatherPlaceInput,
+        weatherPlaceButton
+      );
+    });
+}
+
+weatherPlaceInput.addEventListener("input", () => {
+  weatherPlaceButton.disabled = true;
+  if (weatherPlaceInput.value.length > 2) {
+    fetchLocation(weatherPlaceInput.value);
+  }
+});
 
 weatherPlaceButton.addEventListener("click", () => {
-  // console.log("weatherButton", weatherPlaceInput.value);
-  localStorage.setItem("weatherPlace", weatherPlaceInput.value);
+  console.log("weatherButton", weatherPlaceInput);
+
+  const weatherObjectSelected = placeArray.filter((obj) =>
+    weatherPlaceInput.value.includes(obj.city)
+  );
+  console.log(" weatherObjectSelected", weatherObjectSelected);
+  localStorage.setItem("weatherLatitude", weatherObjectSelected[0].latitude);
+  localStorage.setItem("weatherLongitude", weatherObjectSelected[0].longitude);
+  localStorage.setItem("weatherPlace", weatherObjectSelected[0].city);
   location.reload();
   weatherPlaceInput.value = null;
 });
 
-const phWeather = localStorage.getItem("weatherPlace");
-weatherPlaceInput.setAttribute(
-  "placeholder",
-  `${phWeather[0].toUpperCase()}${phWeather.slice(1).toLowerCase()}...`
-);
+if (localStorage.getItem("weatherPlace")) {
+  // const phWeather = localStorage.getItem("weatherPlace");
+  weatherPlaceInput.setAttribute(
+    "placeholder",
+    localStorage.getItem("weatherPlace")
+    // `${phWeather[0].toUpperCase()}${phWeather.slice(1).toLowerCase()}...`
+  );
+} else {
+  localStorage.setItem("weatherPlace", "Göteborg");
+}
 
 ///////////////////////////////////////////////////////////////////
 //Settings Anime quotes:
@@ -335,21 +349,7 @@ let animeBoxAnimeInput = document.querySelector("#set-anime"),
   animeBoxAnimeButton = document.querySelector("#set-anime-button"),
   animeSuggUl = document.querySelector("#anime-sugglist");
 
-animeBoxAnimeInput.addEventListener("input", () => {
-  animeBoxAnimeButton.disabled = true;
-  if (animeBoxAnimeInput.value.length > 2) {
-    const filteredSearch = filterSearch(animeList, animeBoxAnimeInput.value);
-    dropdownSuggestions(
-      filteredSearch,
-      animeSuggUl,
-      animeBoxAnimeInput,
-      animeBoxAnimeButton
-    );
-  } else {
-    animeSuggUl.style.display = "none";
-  }
-});
-console.log("AAANIMEEE", animeBoxAnimeInput.value);
+animeBoxAnimeButton.disabled = true;
 
 function fetchAnimeBox(search) {
   let getAnime = encodeURIComponent(search);
@@ -370,47 +370,41 @@ function fetchAnimeBox(search) {
 
 console.log("Värde", animeBoxAnimeInput.value);
 
+animeBoxAnimeInput.addEventListener("input", () => {
+  animeBoxAnimeButton.disabled = true;
+  if (animeBoxAnimeInput.value.length > 2) {
+    const filteredSearch = filterSearch(animeList, animeBoxAnimeInput.value);
+    dropdownSuggestions(
+      filteredSearch,
+      animeSuggUl,
+      animeBoxAnimeInput,
+      animeBoxAnimeButton
+    );
+  } else {
+    animeSuggUl.style.display = "none";
+  }
+});
+console.log("AAANIMEEE", animeBoxAnimeInput.value);
+
 animeBoxAnimeButton.addEventListener("click", () => {
   fetchAnimeBox(animeBoxAnimeInput.value);
   // console.log(animeBoxAnimeInput.value);
 });
 
-const phAnime = localStorage.getItem("animeBoxAnime");
-animeBoxAnimeInput.setAttribute(
-  "placeholder",
-  `${phAnime[0].toUpperCase()}${phAnime.slice(1).toLowerCase()}...`
-);
-
-// let animeBoxAnimeInput = document.querySelector("#set-anime"),
-//   animeBoxAnimeButton = document.querySelector("#set-anime-button");
-
-// function fetchAnimeBox(search) {
-//   let getAnime = encodeURIComponent(search);
-//   // console.log(getAnime);
-//   fetch(`https://animechan.vercel.app/api/random/anime?title=${getAnime}`)
-//     .then((response) => response.json())
-//     .then((quote) => {
-//       console.log(quote);
-//       localStorage.setItem(
-//         "animeBoxQuote",
-//         `${quote.quote}  -- ${quote.character}  (${quote.anime})`
-//       );
-//       localStorage.setItem("animeBoxAnime", search);
-//       animeBoxAnimeInput.value = null;
-//       location.reload();
-//     });
-// }
-
-// animeBoxAnimeButton.addEventListener("click", () => {
-//   fetchAnimeBox(animeBoxAnimeInput.value);
-//   // console.log(animeBoxAnimeInput.value);
-// });
-
 // const phAnime = localStorage.getItem("animeBoxAnime");
-// animeBoxAnimeInput.setAttribute(
-//   "placeholder",
-//   `${phAnime[0].toUpperCase()}${phAnime.slice(1).toLowerCase()}...`
-// );
+if (localStorage.getItem("animeBoxAnime")) {
+  animeBoxAnimeInput.setAttribute(
+    "placeholder",
+    localStorage.getItem("animeBoxAnime")
+  );
+} else {
+  localStorage.setItem("animeBoxAnime", "Naruto");
+}
+// `${phAnime[0].toUpperCase()}${phAnime.slice(1).toLowerCase()}...`
+localStorage.setItem(
+  "animeBoxQuote",
+  "As long as you don't give up, you can still be saved! -- Kakashi"
+);
 
 ///////////////////////////////////////////////////////////////////
 // Cities-tjänsten
@@ -580,7 +574,7 @@ function onClickTr(event) {
 
   citiesDeleteButton.disabled = false;
 
-  // every id that has been clicked gets erased in theese two solutions below, fix so only the actual clicked city gets erased when one click the erase button
+  // every id that has been clicked gets erased in theese two solutions below, fix so only the current clicked city gets erased when one click the erase button
 
   // citiesDeleteButton.addEventListener("click", () => {
   //   deleteCities(onClickId);

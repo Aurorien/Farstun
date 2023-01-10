@@ -16,8 +16,8 @@ function clock() {
 setInterval(clock, 1000);
 
 ///////////////////////////////////////////////////////////////////
-// Västtrafik hållplatstablå
-// API'er från: https://developer.vasttrafik.se/portal/#/
+// Västtrafik stop departureboard
+// APIs from: https://developer.vasttrafik.se/portal/#/
 // ".../departureBoard, behöver man exempelvis inte anropa mer än var 10:e sekund, då data inte uppdateras mer frekvent än så."
 
 let vtTdDpLine = document.querySelector("#td-dp-line"),
@@ -34,7 +34,7 @@ let vtTdDpLine = document.querySelector("#td-dp-line"),
   vtThirdDpTime = document.querySelector("#third-dp-time"),
   vtStationp = document.querySelector("#vt-station-p"),
   departureboard;
-/// för uppdatering av avgångstavlan med knappar:
+/// for updating the departureboard with buttons:
 // vtDpButton = document.querySelector("#vt-dp-button"),
 // vtDpButtonStop = document.querySelector("#vt-dp-button-stop"), ///
 
@@ -47,7 +47,7 @@ function fetchVtData(stationId) {
 
   console.log("STATIONid", stationId);
 
-  // Hämtar aktuellt datum och tid
+  // Retrieves the current date and time
   let date = new Date(),
     year = date.getFullYear(),
     month = date.getMonth() + 1,
@@ -80,45 +80,6 @@ function fetchVtData(stationId) {
           departureboard = result.DepartureBoard.Departure;
           console.log("Västtrafik", departureboard);
 
-          // försök till fix av for-loop:
-
-          // let vtext = new f();
-
-          // for (let i = 0; i < 3; i++) {
-          //   let number;
-
-          //   if (i === 0) {
-          //     number = "First";
-          //   } else if (i === 1) {
-          //     number = "Second";
-          //   } else if (i === 2) {
-          //     number = "Third";
-          //   }
-
-          //   console.log("this", this);
-          //   console.log("hära", this["vt" + number + "DpSname"]);
-
-          //   this["vt" + number + "DpSname"].textContent =
-          //     departureboard[i].sname;
-          //   this["vt" + number + "DpSname"].style.backgroundColor =
-          //     departureboard[i].bgColor;
-          //   this["vt" + number + "DpSname"].style.color =
-          //     departureboard[i].fgColor;
-          //   this["vt" + number + "DpDirection"].textContent =
-          //     departureboard[i].direction;
-          //   this["vt" + number + "DpTime"].textContent =
-          //     departureboard[i].rtTime;
-          // }
-
-          // förbättringsförslag: går antagligen att fixa en for-loop  av det här ->
-          //tips: jobba med delar av table (som barnelement till table?)
-
-          //ex. av Albert:
-          // vtTable.foreach(()=>{
-          //   row.textContent =
-          // })
-          // vtTable.tr.td[0]
-
           vtFirstDpSname.textContent = departureboard[0].sname;
           vtFirstDpSname.style.backgroundColor = departureboard[0].bgColor;
           vtFirstDpSname.style.color = departureboard[0].fgColor;
@@ -139,22 +100,20 @@ function fetchVtData(stationId) {
 
           vtStationp.textContent = departureboard[0].stop;
 
-          //div-containern med avgångar visas först när fetch är klart med nedan kod
+          //the div-containern with departures is only displayed when the fetch is finished with the code below
           document.querySelector("#vtbox").style.display = "block";
         });
     });
 }
 
-//kör fetchStation-funktionen:
-
 fetchVtData(localStorage.getItem("vtInputStopId"));
-//uppdaterar avgångstavlan i intervall:
+//updates the departureboard in intervals:
 setInterval(() => {
   fetchVtData(localStorage.getItem("vtInputStopId"));
 }, 15000);
 
-//ALTERNATIVA VISNINGAR/UPPDATERINGAR AV AVGÅNGSTAVLAN:
-//Uppdaterar avgångstavlan en gång per klick med tidsbestämd delay:
+//ALTERNATE DISPLAYS/UPDATES OF THE DEPARTURE BOARD:
+//Updates the departure board once per click with a timed delay:
 // vtDpButton.addEventListener("click", () => {
 //   let currStop = localStorage.getItem("saveStop");
 //   console.log(currStop);
@@ -162,8 +121,8 @@ setInterval(() => {
 //   console.log("fetchVtDataTIMEOUT", fetchVtData);
 // });
 
-//Kontinuerlig uppdatering med ett tidsintervall
-//(https://avgangstavla.vasttrafik.se/?source=vasttrafikse-depatureboardlinkgenerator&stopAreaGid=9021014004940000 : den uppdaterar var 15 sekunder)
+//Continuous update with a time interval:
+//(https://avgangstavla.vasttrafik.se/?source=vasttrafikse-depatureboardlinkgenerator&stopAreaGid=9021014004940000 : it updates every 15 seconds)
 
 // setTimeout(fetchVtData);
 // let update;
@@ -177,7 +136,7 @@ setInterval(() => {
 // });
 
 ///////////////////////////////////////////////////////////////////
-//Animebox
+//Animebox:
 
 let animeBox = document.querySelector("#animebox"),
   x;
@@ -201,90 +160,9 @@ fetch(`https://animechan.vercel.app/api/random/anime?title=${x}`)
   });
 
 ///////////////////////////////////////////////////////////////////
-//Weatherbox (SMHI)
-//(Ex. : https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/11.914579/lat/57.687521/data.json -Meterologiska data över punkt i Göteborg)
-//
-//MED PLATSSÖKNING (funkar ej med sökvariabler i adressen som i nedan variant):
-
-// const weatherTempNow = document.querySelector("#weather-temp-now"),
-//   weatherH2Temp = document.querySelector("#weather-h2-temp");
-
-// let place, lon, lat, city;
-
-// if (localStorage.getItem("weatherPlace") !== null) {
-//   place = localStorage.getItem("weatherPlace");
-// } else {
-//   place = "Göteborg";
-// }
-
-// fetchLocation(place);
-
-// function fetchLocation(place) {
-//   console.log("Place i fetchLocation", place);
-//   fetch(
-//     `https://api.papapi.se/lite/?query=${place}&format=json&apikey=***REMOVED***`
-//   )
-//     .then((response) => response.json())
-//     .then((result) => {
-//       console.log("LocationFetch", result);
-//       localStorage.setItem("lon", result.results[0].longitude);
-//       localStorage.setItem("lat", result.results[0].latitude);
-//       localStorage.setItem("city", result.results[0].city);
-
-//       weatherH2Temp.textContent = `Temperatur i ${city}`;
-//       console.log(weatherH2Temp.textContent);
-
-//       console.log("LonLat i fetchLocation", lon, lat);
-//     });
-// }
-
-// lon = localStorage.getItem("lon");
-// lat = localStorage.getItem("lat");
-// city = localStorage.getItem("city");
-
-// console.log("LonLAT Ute", lon, lat);
-// fetchWeather(lon, lat);
-
-// function fetchWeather(lon, lat) {
-//   let longitud = lon,
-//     latitud = lat;
-//   console.log("LonLat i fetchweather", longitud, latitud);
-//   let string = `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${longitud}/lat/${latitud}/data.json`;
-
-//   console.log(string);
-//   fetch(
-//     `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${longitud}/lat/${latitud}/data.json`
-//   )
-//     .then((response) => response.json())
-//     .then((now) => {
-//       console.log("weather", now);
-//       console.log("weatherTemp", now.timeSeries[0].parameters[10].values[0]);
-//       weatherTempNow.textContent = `${now.timeSeries[0].parameters[10].values[0]}  ºC`;
-//     });
-// }
-
-////////////////////////////
-//UTAN PLATSSÖKNING (funkar utan sökvariabler i adressen som i följande varaiant):
-
-// const weatherTemp = document.querySelector("#weather-temp-now"),
-//   weatherH2Temp = document.querySelector("#weather-h2-temp");
-
-// fetch(
-//   `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/11.97456/lat/57.708870/data.json`
-// )
-//   .then((response) => response.json())
-//   .then((now) => {
-//     console.log("weather", now);
-//     console.log("weatherTempNow", now.timeSeries[0].parameters[10].values[0]);
-//     weatherTempNow.textContent = `${now.timeSeries[0].parameters[10].values[0]}  ºC`;
-//   });
-
-/////////////////////////////
-//TESTAR LIKT MED SMHI FAST MED https://openweathermap.org/current
-// Hämtar plats via api från https://papilite.se/
-//(för gratisversionen kan en göra 1000 anrop/månad)
+//Weatherbox:
+// https://openweathermap.org/
 // https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid=***REMOVED***
-//(för gratisversionen kan en göra max ett anrop var 14,5 min)
 
 const weatherH2Temp = document.querySelector("#weather-h2-temp"),
   weatherTempNow = document.querySelector("#weather-temp-now"),
@@ -308,36 +186,23 @@ let place,
   canvas = null;
 
 function weatherStart() {
-  if (localStorage.getItem("weatherPlace") !== null) {
-    place = localStorage.getItem("weatherPlace");
+  if (localStorage.getItem("weatherLatitude") !== null) {
+    latitude = localStorage.getItem("weatherLatitude");
+    longitude = localStorage.getItem("weatherLongitude");
+    console.log("LON LAT", longitude, latitude);
   } else {
-    place = "Göteborg";
-    localStorage.setItem("weatherPlace", place);
+    latitude = "57.7088700";
+    longitude = "11.9745600";
+    localStorage.setItem("weatherLatitude", latitude);
+    localStorage.setItem("weatherLongitude", longitude);
   }
-
-  fetchLocation(place);
+  weatherH2Pcpn.textContent = `Väder i ${localStorage.getItem("weatherPlace")}`;
+  fetchWeather(latitude, longitude);
+  fetchForecast(latitude, longitude);
 }
 
-function fetchLocation(place) {
-  fetch(
-    `https://api.papapi.se/lite/?query=${place}&format=json&apikey=***REMOVED***`
-  )
-    .then((response) => response.json())
-    .then((result) => {
-      console.log("LocationFetch", result);
-      let lon = result.results[0].longitude,
-        lat = result.results[0].latitude,
-        city = result.results[0].city;
-
-      weatherH2Pcpn.textContent = `Väder i ${city}`;
-
-      fetchWeather(lon, lat);
-      fetchForecast(lon, lat);
-    });
-}
-
-function fetchWeather(lon, lat) {
-  // vädret just nu
+function fetchWeather(lat, lon) {
+  // the weather right now
   fetch(
     `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=se&units=metric&appid=***REMOVED***`
   )
@@ -362,7 +227,7 @@ function fetchWeather(lon, lat) {
 }
 
 function fetchForecast(lon, lat) {
-  // prognos i tretimmars-intervaller
+  // forecast in three hours intervals
   fetch(
     `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=se&units=metric&appid=***REMOVED***`
   )
@@ -437,11 +302,9 @@ function chartTemp(forecast) {
 }
 
 ///////////////////////////////////////////////////////////////////
-// Hamburgarmeny
+// Path to Settings
 
 const gear = document.querySelector("#gear-index");
-
-// const burger = document.querySelector("#burger-index");
 
 function onBurgerClick() {
   const insideBurger = document.querySelector("#link-index");
@@ -452,6 +315,10 @@ function onBurgerClick() {
     insideBurger.style.display = "block";
   }
 }
+
+//ALTERNATIVE: HAMBURGER MENU
+
+// const burger = document.querySelector("#burger-index");
 
 // function onBurgerClick() {
 //   const insideBurger = document.querySelector("#link-index"),
