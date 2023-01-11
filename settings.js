@@ -137,7 +137,7 @@ vtInputStop.addEventListener("input", () => {
 
 vtButtonStop.addEventListener("click", () => {
   console.log("VtButton", vtInputStop.value);
-  // look for the object in filteredstopArray whoose key name has the same value as vtInputStop.value and fronm that object get the value of the key id.
+  // look for the object in filteredstopArray whoose key name has the same value as vtInputStop.value and from that object get the value of the key id.
   const vtObjectSelected = filteredstopArray.filter((obj) =>
     vtInputStop.value.includes(obj.name)
   );

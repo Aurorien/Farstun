@@ -152,11 +152,12 @@ fetch(`https://animechan.vercel.app/api/random/anime?title=${x}`)
   .then((response) => response.json())
   .then((quote) => {
     console.log(quote);
-    if (localStorage.getItem("animeBoxQuote") !== null) {
-      animeBox.textContent = localStorage.getItem("animeBoxQuote");
-    } else {
-      animeBox.textContent = `${quote.quote}  -- ${quote.character}  (${quote.anime})`;
-    }
+    animeBox.textContent = `${quote.quote}  -- ${quote.character}  (${quote.anime})`;
+    // if (localStorage.getItem("animeBoxQuote") !== null) {
+    //   animeBox.textContent = localStorage.getItem("animeBoxQuote");
+    // } else {
+    //   animeBox.textContent = `${quote.quote}  -- ${quote.character}  (${quote.anime})`;
+    // }
   });
 
 ///////////////////////////////////////////////////////////////////
