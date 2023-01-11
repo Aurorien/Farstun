@@ -197,7 +197,15 @@ function weatherStart() {
     localStorage.setItem("weatherLatitude", latitude);
     localStorage.setItem("weatherLongitude", longitude);
   }
-  weatherH2Pcpn.textContent = `Väder i ${localStorage.getItem("weatherPlace")}`;
+
+  if (localStorage.getItem("weatherPlace")) {
+    weatherH2Pcpn.textContent = `Väder i ${localStorage.getItem(
+      "weatherPlace"
+    )}`;
+  } else {
+    weatherH2Pcpn.textContent = `Väder i Göteborg`;
+  }
+
   fetchWeather(latitude, longitude);
   fetchForecast(latitude, longitude);
 }
