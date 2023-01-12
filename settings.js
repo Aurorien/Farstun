@@ -43,16 +43,22 @@ document.addEventListener("click", (event) => {
   }
 });
 
+//////////////////////
+
+const changeButton = document.querySelector("#change-button");
+
+changeButton.disabled = true;
+
 ///////////////////////////////////////////////////////////////////
 //Settings Västtrafik:
 
 let stopId;
 const vtInputStop = document.querySelector("#stop-name"),
-  vtButtonStop = document.querySelector("#stop-name-button"),
+  // vtButtonStop = document.querySelector("#stop-name-button"),
   vtSuggUl = document.querySelector("#vt-sugglist");
 let filteredstopArray;
 
-vtButtonStop.disabled = true;
+// vtButtonStop.disabled = true;
 
 //get station by input name
 function fetchStation(stationName) {
@@ -117,45 +123,23 @@ function fetchStation(stationName) {
           if (filtList.length > 3) {
             filtList = filtList.slice(0, 3);
           }
-
           // console.log("PUSH", filtList);
           // console.log("VTinputSTOP", vtInputStop);
-
-          dropdownSuggestions(filtList, vtSuggUl, vtInputStop, vtButtonStop);
+          dropdownSuggestions(filtList, vtSuggUl, vtInputStop, changeButton);
         });
     });
 }
 
 vtInputStop.addEventListener("input", () => {
-  vtButtonStop.disabled = true;
+  // vtButtonStop.disabled = true;
+  changeButton.disabled = true;
   if (vtInputStop.value.length > 2) {
     fetchStation(vtInputStop.value);
   }
 });
 
-// console.log("VTInputStopppp", vtInputStop.value);
-
-vtButtonStop.addEventListener("click", () => {
-  console.log("VtButton", vtInputStop.value);
-  // look for the object in filteredstopArray whoose key name has the same value as vtInputStop.value and from that object get the value of the key id.
-  const vtObjectSelected = filteredstopArray.filter((obj) =>
-    vtInputStop.value.includes(obj.name)
-  );
-  console.log("vtObjectSelected", vtObjectSelected[0].id);
-
-  localStorage.setItem("vtInputStopId", vtObjectSelected[0].id);
-  localStorage.setItem("vtInputStop", vtInputStop.value);
-  vtInputStop.value = null;
-  location.reload();
-});
-
 if (localStorage.getItem("vtInputStop")) {
-  const lsVt = localStorage.getItem("vtInputStop");
-  vtInputStop.setAttribute(
-    "placeholder",
-    localStorage.getItem("vtInputStop")
-    // `${lsVt[0].toUpperCase()}${lsVt.slice(1).toLowerCase()}...`
-  );
+  vtInputStop.setAttribute("placeholder", localStorage.getItem("vtInputStop"));
 } else {
   localStorage.setItem("vtInputStop", "Nils Ericson Terminalen, Göteborg");
 }
@@ -165,11 +149,8 @@ if (localStorage.getItem("vtInputStop")) {
 // getting geocoding by https://papilite.se/
 
 const weatherPlaceInput = document.querySelector("#set-weather-place"),
-  weatherPlaceButton = document.querySelector("#set-weather-place-button"),
   weatherSuggUl = document.querySelector("#weather-sugglist");
-let placeArray = [];
-
-weatherPlaceButton.disabled = true;
+let weatherPlaceArray = [];
 
 function fetchLocation(place) {
   const locationName = encodeURIComponent(place);
@@ -179,7 +160,7 @@ function fetchLocation(place) {
     .then((response) => response.json())
     .then((result) => {
       console.log("LocationFetch", result);
-      placeArray = result.results.filter((item, index) => {
+      weatherPlaceArray = result.results.filter((item, index) => {
         const check =
           result.results.findIndex(
             (elem) => elem.city === item.city && elem.county === item.county
@@ -187,11 +168,11 @@ function fetchLocation(place) {
         return check;
       });
 
-      console.log("PLACEarray", placeArray);
+      console.log("weatherPlaceArray", weatherPlaceArray);
 
       let placeList = [];
 
-      placeArray.forEach((obj) => {
+      weatherPlaceArray.forEach((obj) => {
         placeList.push(`${obj.city}, ${obj.county}`);
       });
 
@@ -201,38 +182,22 @@ function fetchLocation(place) {
         placeList,
         weatherSuggUl,
         weatherPlaceInput,
-        weatherPlaceButton
+        changeButton
       );
     });
 }
 
 weatherPlaceInput.addEventListener("input", () => {
-  weatherPlaceButton.disabled = true;
+  changeButton.disabled = true;
   if (weatherPlaceInput.value.length > 2) {
     fetchLocation(weatherPlaceInput.value);
   }
 });
 
-weatherPlaceButton.addEventListener("click", () => {
-  console.log("weatherButton", weatherPlaceInput);
-
-  const weatherObjectSelected = placeArray.filter((obj) =>
-    weatherPlaceInput.value.includes(obj.city)
-  );
-  console.log(" weatherObjectSelected", weatherObjectSelected);
-  localStorage.setItem("weatherLatitude", weatherObjectSelected[0].latitude);
-  localStorage.setItem("weatherLongitude", weatherObjectSelected[0].longitude);
-  localStorage.setItem("weatherPlace", weatherObjectSelected[0].city);
-  location.reload();
-  weatherPlaceInput.value = null;
-});
-
 if (localStorage.getItem("weatherPlace")) {
-  // const phWeather = localStorage.getItem("weatherPlace");
   weatherPlaceInput.setAttribute(
     "placeholder",
     localStorage.getItem("weatherPlace")
-    // `${phWeather[0].toUpperCase()}${phWeather.slice(1).toLowerCase()}...`
   );
 } else {
   localStorage.setItem("weatherPlace", "Göteborg");
@@ -346,39 +311,31 @@ const animeList = [
 ];
 
 let animeBoxAnimeInput = document.querySelector("#set-anime"),
-  animeBoxAnimeButton = document.querySelector("#set-anime-button"),
   animeSuggUl = document.querySelector("#anime-sugglist");
 
-animeBoxAnimeButton.disabled = true;
-
-function fetchAnimeBox(search) {
+async function fetchAnimeBox(search) {
   let getAnime = encodeURIComponent(search);
-  // console.log(getAnime);
-  fetch(`https://animechan.vercel.app/api/random/anime?title=${getAnime}`)
-    .then((response) => response.json())
-    .then((quote) => {
-      console.log(quote);
-      localStorage.setItem(
-        "animeBoxQuote",
-        `${quote.quote}  -- ${quote.character}  (${quote.anime})`
-      );
-      localStorage.setItem("animeBoxAnime", search);
-      animeBoxAnimeInput.value = null;
-      location.reload();
-    });
+  const result = await (
+    await fetch(
+      `https://animechan.vercel.app/api/random/anime?title=${getAnime}`
+    )
+  ).json();
+  console.log("RESULT ANIME AWAIT", result);
+  return result;
 }
 
 console.log("Värde", animeBoxAnimeInput.value);
 
 animeBoxAnimeInput.addEventListener("input", () => {
-  animeBoxAnimeButton.disabled = true;
+  changeButton.disabled = true;
   if (animeBoxAnimeInput.value.length > 2) {
     const filteredSearch = filterSearch(animeList, animeBoxAnimeInput.value);
+
     dropdownSuggestions(
       filteredSearch,
       animeSuggUl,
       animeBoxAnimeInput,
-      animeBoxAnimeButton
+      changeButton
     );
   } else {
     animeSuggUl.style.display = "none";
@@ -386,12 +343,6 @@ animeBoxAnimeInput.addEventListener("input", () => {
 });
 console.log("AAANIMEEE", animeBoxAnimeInput.value);
 
-animeBoxAnimeButton.addEventListener("click", () => {
-  fetchAnimeBox(animeBoxAnimeInput.value);
-  // console.log(animeBoxAnimeInput.value);
-});
-
-// const phAnime = localStorage.getItem("animeBoxAnime");
 if (localStorage.getItem("animeBoxAnime")) {
   animeBoxAnimeInput.setAttribute(
     "placeholder",
@@ -400,11 +351,52 @@ if (localStorage.getItem("animeBoxAnime")) {
 } else {
   localStorage.setItem("animeBoxAnime", "Naruto");
 }
-// `${phAnime[0].toUpperCase()}${phAnime.slice(1).toLowerCase()}...`
 localStorage.setItem(
   "animeBoxQuote",
-  "As long as you don't give up, you can still be saved! -- Kakashi"
+  "As long as you don't give up, you can still be saved! -- Hatake Kakashi"
 );
+
+////////////////////////////////////
+changeButton.addEventListener("click", () => {
+  if (weatherPlaceInput.value) {
+    const weatherObjectSelected = weatherPlaceArray.filter((obj) =>
+      weatherPlaceInput.value.includes(obj.city)
+    );
+    // console.log(" weatherObjectSelected", weatherObjectSelected);
+    localStorage.setItem("weatherLatitude", weatherObjectSelected[0].latitude);
+    localStorage.setItem(
+      "weatherLongitude",
+      weatherObjectSelected[0].longitude
+    );
+    localStorage.setItem("weatherPlace", weatherObjectSelected[0].city);
+    weatherPlaceInput.value = null;
+  }
+  //
+  if (animeBoxAnimeInput.value) {
+    const animeResultArray = fetchAnimeBox(animeBoxAnimeInput.value);
+    console.log("animeResultArray", animeResultArray);
+    localStorage.setItem(
+      "animeBoxQuote",
+      `${animeResultArray.quote}  -- ${animeResultArray.character}  (${animeResultArray.anime})`
+    );
+    localStorage.setItem("animeBoxAnime", animeBoxAnimeInput.value);
+    animeBoxAnimeInput.value = null;
+
+    // look for the object in filteredstopArray whoose key name has the same value as vtInputStop.value and from that object get the value of the key id
+    if (vtInputStop.value) {
+      const vtObjectSelected = filteredstopArray.filter((obj) =>
+        vtInputStop.value.includes(obj.name)
+      );
+      console.log("vtObjectSelected", vtObjectSelected[0].id);
+
+      localStorage.setItem("vtInputStopId", vtObjectSelected[0].id);
+      localStorage.setItem("vtInputStop", vtInputStop.value);
+      vtInputStop.value = null;
+      // location.reload();
+    }
+    location.reload();
+  }
+});
 
 ///////////////////////////////////////////////////////////////////
 // Cities-tjänsten

@@ -13,7 +13,8 @@ function clock() {
   )} \n\nTid: ${time.substring(0, 8)}`;
 }
 
-setInterval(clock, 1000);
+const oneSecond = 1000;
+setInterval(clock, oneSecond);
 
 ///////////////////////////////////////////////////////////////////
 // Västtrafik stop departureboard
@@ -34,7 +35,7 @@ let vtTdDpLine = document.querySelector("#td-dp-line"),
   vtThirdDpTime = document.querySelector("#third-dp-time"),
   vtStationp = document.querySelector("#vt-station-p"),
   departureboard;
-/// for updating the departureboard with buttons:
+/// for version updating the departureboard with buttons:
 // vtDpButton = document.querySelector("#vt-dp-button"),
 // vtDpButtonStop = document.querySelector("#vt-dp-button-stop"), ///
 
@@ -122,15 +123,16 @@ setInterval(() => {
 // });
 
 //Continuous update with a time interval:
-//(https://avgangstavla.vasttrafik.se/?source=vasttrafikse-depatureboardlinkgenerator&stopAreaGid=9021014004940000 : it updates every 15 seconds)
+
+//(10 seconds is instructed as the shortest update time because the backend doesn't provide new information more often than that, this departureboard page by Västtrafik updates every 15 seconds: https://avgangstavla.vasttrafik.se/?source=vasttrafikse-depatureboardlinkgenerator&stopAreaGid=9021014004940000)
 
 // setTimeout(fetchVtData);
 // let update;
 // vtDpButton.addEventListener("click", () => {
-//   update = setInterval(fetchVtData, 1000);
+//   update = setInterval(fetchVtData, 15000);
 // });
 
-// // Avslutar setIntervall stänger av:
+// // Shuts off setIntervall:
 // vtDpButtonStop.addEventListener("click", () => {
 //   clearInterval(update);
 // });
@@ -141,7 +143,7 @@ setInterval(() => {
 let animeBox = document.querySelector("#animebox"),
   x;
 
-if (localStorage.getItem("animeBoxAnime") !== null) {
+if (localStorage.getItem("animeBoxAnime")) {
   x = encodeURIComponent(localStorage.getItem("animeBoxAnime"));
 } else {
   x = "Naruto";
