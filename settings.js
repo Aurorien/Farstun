@@ -15,8 +15,9 @@ function dropdownSuggestions(array, list, input, button) {
   list.style.display = "block";
   list.addEventListener("click", (event) => {
     const value = event.target.innerText;
-    // console.log("VALUE", event);
+    console.log("VALUE", event);
     input.value = value;
+    console.log("INPUTVALUE", input.value);
     list.style.display = "none";
     button.disabled = false;
   });
@@ -111,7 +112,7 @@ function fetchStation(stationName) {
             selectedKeys.reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {})
           );
 
-          // console.log("FILTERED", filteredstopArray);
+          console.log("FILTERED", filteredstopArray);
 
           let filtList = [];
 
@@ -358,11 +359,15 @@ localStorage.setItem(
 
 ////////////////////////////////////
 changeButton.addEventListener("click", () => {
-  if (weatherPlaceInput.value) {
+  console.log("animeBoxAnimeInput.value", animeBoxAnimeInput.value);
+  console.log("filteredstopArray", filteredstopArray);
+
+  if (weatherPlaceInput.value !== "") {
+    console.log("Hej1");
     const weatherObjectSelected = weatherPlaceArray.filter((obj) =>
       weatherPlaceInput.value.includes(obj.city)
     );
-    // console.log(" weatherObjectSelected", weatherObjectSelected);
+    console.log(" weatherObjectSelected", weatherObjectSelected);
     localStorage.setItem("weatherLatitude", weatherObjectSelected[0].latitude);
     localStorage.setItem(
       "weatherLongitude",
@@ -373,6 +378,7 @@ changeButton.addEventListener("click", () => {
   }
   //
   if (animeBoxAnimeInput.value) {
+    console.log("Hej2");
     const animeResultArray = fetchAnimeBox(animeBoxAnimeInput.value);
     console.log("animeResultArray", animeResultArray);
     localStorage.setItem(
@@ -381,21 +387,26 @@ changeButton.addEventListener("click", () => {
     );
     localStorage.setItem("animeBoxAnime", animeBoxAnimeInput.value);
     animeBoxAnimeInput.value = null;
-
-    // look for the object in filteredstopArray whoose key name has the same value as vtInputStop.value and from that object get the value of the key id
-    if (vtInputStop.value) {
-      const vtObjectSelected = filteredstopArray.filter((obj) =>
-        vtInputStop.value.includes(obj.name)
-      );
-      console.log("vtObjectSelected", vtObjectSelected[0].id);
-
-      localStorage.setItem("vtInputStopId", vtObjectSelected[0].id);
-      localStorage.setItem("vtInputStop", vtInputStop.value);
-      vtInputStop.value = null;
-      // location.reload();
-    }
-    location.reload();
   }
+
+  // look for the object in filteredstopArray whoose key name has the same value as vtInputStop.value and from that object get the value of the key id
+  console.log("vtInputStop.value", vtInputStop.value);
+
+  if (vtInputStop.value) {
+    console.log("Hej3");
+    console.log("filteredstopArray", filteredstopArray);
+
+    const vtObjectSelected = filteredstopArray.filter((obj) =>
+      vtInputStop.value.includes(obj.name)
+    );
+    console.log("vtObjectSelected", vtObjectSelected);
+
+    localStorage.setItem("vtInputStopId", vtObjectSelected[0].id);
+    localStorage.setItem("vtInputStop", vtInputStop.value);
+    vtInputStop.value = null;
+    // location.reload();
+  }
+  location.reload();
 });
 
 ///////////////////////////////////////////////////////////////////
