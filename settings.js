@@ -406,7 +406,7 @@ changeButton.addEventListener("click", () => {
     vtInputStop.value = null;
     // location.reload();
   }
-  // location.reload();
+  location.reload();
 });
 
 ///////////////////////////////////////////////////////////////////
