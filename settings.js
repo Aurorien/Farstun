@@ -407,7 +407,7 @@ changeButton.addEventListener("click", () => {
     // location.reload();
   }
   console.log("Location Reload");
-  window.location.reload();
+  location.reload();
 });
 
 ///////////////////////////////////////////////////////////////////
