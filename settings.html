@@ -11,8 +11,11 @@
     />
     <link rel="stylesheet" href="settings.css" />
   </head>
+  <!-- Jon-input: *klar*form, fieldset (för tillgänglighet), submit-typ för knapparna (buttons istället?), preventDefault -->
   <body>
-    <div id="settings">
+    <form id="settings">
+      <!-- <fieldset> -->
+      <!-- <legend id="settings-h1">Inställningar</legend> -->
       <h1 id="settings-h1">Inställningar</h1>
       <div class="set" id="settings-weather">
         <label for="set-weather-place">Väder- Ändra ort:</label>
@@ -20,7 +23,7 @@
           <input
             class="set-input"
             id="set-weather-place"
-            placeholder=""
+            placeholder="Ort..."
             type="text"
           />
           <ul class="dropdown" id="weather-sugglist"></ul>
@@ -29,14 +32,24 @@
       <div class="set" id="settings-anime">
         <label for="set-anime" id="anime-label">Citat- Ändra anime:</label>
         <div class="sugg">
-          <input class="set-input" id="set-anime" placeholder="" type="text" />
+          <input
+            class="set-input"
+            id="set-anime"
+            placeholder="Titel..."
+            type="text"
+          />
           <ul class="dropdown" id="anime-sugglist"></ul>
         </div>
       </div>
       <div class="set" id="settings-vt">
         <label for="stop-name">Västtrafik Avgångstavla- Ändra hållplats:</label>
         <div class="sugg">
-          <input class="set-input" id="stop-name" placeholder="" type="text" />
+          <input
+            class="set-input"
+            id="stop-name"
+            placeholder="Hållplats..."
+            type="text"
+          />
           <ul class="dropdown" id="vt-sugglist"></ul>
         </div>
       </div>
@@ -46,11 +59,14 @@
         type="button"
         value="Ändra"
       />
-    </div>
+      <!-- </fieldset> -->
+    </form>
     <footer id="footer-settings">
       <div id="settings-cities">
         <h1>Cities-tjänsten</h1>
-        <label for="cities-get">Tryck på knappen för att hämta städerna</label>
+        <label for="cities-initial-get-button"
+          >Tryck på knappen för att hämta städerna</label
+        >
         <input
           class="set-button"
           id="cities-initial-get-button"

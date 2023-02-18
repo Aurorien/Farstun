@@ -81,6 +81,21 @@ function fetchVtData(stationId) {
           departureboard = result.DepartureBoard.Departure;
           console.log("Västtrafik", departureboard);
 
+          // en början på en variant (av Jon):
+          // const a = [vtFirstDpSname, vtSecondDpSname, vtThirdDpSname];
+
+          // troligen en lösning som fixar hela paketet med en loop (av Jon):
+          // const trs = document.querySelector("tr");
+
+          // // Skip first tr due to headings
+          // for (let n = 1; n < trs.length; n++) {
+          //   trs[n].querySelector(".sname").textContent =
+          //     departureboard[n].sname;
+          //   trs[n].querySelector(".direction").textContent =
+          //     departureboard[n].sname;
+          //   trs[n].querySelector(".time").textContent = departureboard[n].sname;
+          // }
+
           vtFirstDpSname.textContent = departureboard[0].sname;
           vtFirstDpSname.style.backgroundColor = departureboard[0].bgColor;
           vtFirstDpSname.style.color = departureboard[0].fgColor;

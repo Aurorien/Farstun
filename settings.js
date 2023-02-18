@@ -37,9 +37,10 @@ document.addEventListener("click", (event) => {
     const dropdown = document.querySelectorAll(".dropdown");
     // console.log("DROPDOWN", dropdown);
     for (let i = 0; i < dropdown.length; i++) {
-      if ((dropdown[i].style.display = "block")) {
-        dropdown[i].style.display = "none";
-      }
+      // if (dropdown[i].style.display === "block") {
+      //   dropdown[i].style.display = "none";
+      // }
+      dropdown[i].style.display = "none";
     }
   }
 });
@@ -546,6 +547,9 @@ function onClickTr(event) {
   event.currentTarget.classList.add("tr-clicked");
 
   // Name and population:
+  console.log("event.currentTarget.children", event.currentTarget.children);
+
+  //  använd på nedan kod: event.currentTarget.querySelector('p')
   let onClickId = event.currentTarget.children[0].textContent,
     onClickName = event.currentTarget.children[1].children[0],
     patchName = event.currentTarget.children[1].children[0].value,
