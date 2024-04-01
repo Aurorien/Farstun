@@ -64,15 +64,14 @@ let filteredstopArray;
 
 //get station by input name
 function fetchStation(stationName) {
-  console.log("Hallå " + stationName + "(i fetchStation)");
-
   // encode characters the so they work in query param
   const stopName = encodeURIComponent(stationName);
 
   fetch("https://ext-api.vasttrafik.se/token", {
     body: "grant_type=client_credentials&scope=0",
     headers: {
-      Authorization: `${AUTHTOKEN}`,
+      Authorization:
+        "Basic ***REMOVED***",
       "Content-Type": "application/x-www-form-urlencoded",
     },
     method: "POST",

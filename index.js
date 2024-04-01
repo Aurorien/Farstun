@@ -45,12 +45,11 @@ function fetchVtData(stationId) {
     stationId = "9021014004940000";
   }
 
-  console.log("Exported authToken", AUTHTOKEN);
-
   fetch("https://ext-api.vasttrafik.se/token", {
     body: "grant_type=client_credentials&scope=0",
     headers: {
-      Authorization: `${AUTHTOKEN}`,
+      Authorization:
+        "Basic ***REMOVED***",
       "Content-Type": "application/x-www-form-urlencoded",
     },
     method: "POST",
@@ -88,19 +87,10 @@ function fetchVtData(stationId) {
           //   trs[n].querySelector(".time").textContent = departureboard[n].sname;
           // }
           function getTimeDifference(dateTime) {
-            // Get the current time
-            const departureTime = new Date(dateTime);
-
-            const now = new Date();
-
-            // Calculate the difference in milliseconds
-            const diff = departureTime - now;
-
-            console.log("diff", diff);
-
-            // Convert milliseconds to minutes
-            const diffInMinutes = Math.floor(diff / 1000 / 60);
-            console.log("diffInMinutes", diffInMinutes);
+            const departureTime = new Date(dateTime),
+              now = new Date(),
+              diff = departureTime - now,
+              diffInMinutes = Math.floor(diff / 1000 / 60);
 
             if (diffInMinutes < 1) {
               return `Now`;
@@ -156,7 +146,7 @@ function fetchVtData(stationId) {
 fetchVtData(localStorage.getItem("vtInputStopId"));
 //updates the departureboard in intervals:
 setInterval(() => {
-  fetchVtNew(localStorage.getItem("vtInputStopId"));
+  fetchVtData(localStorage.getItem("vtInputStopId"));
 }, 15000);
 
 //ALTERNATE DISPLAYS/UPDATES OF THE DEPARTURE BOARD:
