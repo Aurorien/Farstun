@@ -38,7 +38,7 @@ let vtTdDpLine = document.querySelector("#td-dp-line"),
 // vtDpButton = document.querySelector("#vt-dp-button"),
 // vtDpButtonStop = document.querySelector("#vt-dp-button-stop"), ///
 
-function fetchVtNew(stationId) {
+function fetchVtData(stationId) {
   console.log("fetchData stationId:", JSON.stringify(stationId));
 
   if (stationId === null && localStorage.getItem("vtInputStopId") === null) {
@@ -153,100 +153,11 @@ function fetchVtNew(stationId) {
     });
 }
 
-fetchVtNew(localStorage.getItem("vtInputStopId"));
+fetchVtData(localStorage.getItem("vtInputStopId"));
 //updates the departureboard in intervals:
 setInterval(() => {
   fetchVtNew(localStorage.getItem("vtInputStopId"));
 }, 15000);
-
-// function fetchVtData(stationId) {
-//   // console.log("fetchData stationId:", JSON.stringify(stationId));
-
-//   if (stationId === null && localStorage.getItem("vtInputStopId") === null) {
-//     stationId = "9021014004940000";
-//   }
-
-//   console.log("STATIONid", stationId);
-
-//   // Retrieves the current date and time
-//   let date = new Date(),
-//     year = date.getFullYear(),
-//     month = date.getMonth() + 1,
-//     dayDate = date.getDate(),
-//     hour = date.getHours(),
-//     minuits = date.getMinutes();
-
-//   fetch("https://api.vasttrafik.se/token", {
-//     body: "grant_type=client_credentials&scope=0",
-//     headers: {
-//       Authorization:
-//         "Basic MEVvUWFJNW9lbVVLajYwdWM2M3F5OUlDdlpJYTpxaXFUZWg4eFlmV0ZVMDAwMFBMYmZYSU1zeDhh",
-//       "Content-Type": "application/x-www-form-urlencoded",
-//     },
-//     method: "POST",
-//   })
-//     .then((response) => response.json())
-//     .then((result) => {
-//       fetch(
-//         `https://api.vasttrafik.se/bin/rest.exe/v2/departureBoard?id=${stationId}&date=${year}-${month}-${dayDate}&time=${hour}%3A${minuits}&format=json`,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${result.access_token}`,
-//           },
-//         }
-//       )
-//         .then((response) => response.json())
-//         .then((result) => {
-//           console.log("fetchData Resultat", result);
-//           departureboard = result.DepartureBoard.Departure;
-//           console.log("Västtrafik", departureboard);
-
-//           // en början på en variant (av Jon):
-//           // const a = [vtFirstDpSname, vtSecondDpSname, vtThirdDpSname];
-
-//           // troligen en lösning som fixar hela paketet med en loop (av Jon):
-//           // const trs = document.querySelector("tr");
-
-//           // // Skip first tr due to headings
-//           // for (let n = 1; n < trs.length; n++) {
-//           //   trs[n].querySelector(".sname").textContent =
-//           //     departureboard[n].sname;
-//           //   trs[n].querySelector(".direction").textContent =
-//           //     departureboard[n].sname;
-//           //   trs[n].querySelector(".time").textContent = departureboard[n].sname;
-//           // }
-
-//           vtFirstDpSname.textContent = departureboard[0].sname;
-//           vtFirstDpSname.style.backgroundColor = departureboard[0].bgColor;
-//           vtFirstDpSname.style.color = departureboard[0].fgColor;
-//           vtFirstDpDirection.textContent = departureboard[0].direction;
-//           vtFirstDpTime.textContent = departureboard[0].rtTime;
-
-//           vtSecondDpSname.textContent = departureboard[1].sname;
-//           vtSecondDpSname.style.backgroundColor = departureboard[1].bgColor;
-//           vtSecondDpSname.style.color = departureboard[1].fgColor;
-//           vtSecondDpDirection.textContent = departureboard[1].direction;
-//           vtSecondDpTime.textContent = departureboard[1].rtTime;
-
-//           vtThirdDpSname.textContent = departureboard[2].sname;
-//           vtThirdDpSname.style.backgroundColor = departureboard[2].bgColor;
-//           vtThirdDpSname.style.color = departureboard[2].fgColor;
-//           vtThirdDpDirection.textContent = departureboard[2].direction;
-//           vtThirdDpTime.textContent = departureboard[2].rtTime;
-
-//           vtStationp.textContent = departureboard[0].stop;
-
-//           //the div-containern with departures is only displayed when the fetch is finished with the code below
-//           document.querySelector("#vtbox").style.display = "block";
-//         });
-//     });
-// }
-
-// fetchVtData(localStorage.getItem("vtInputStopId"));
-// //updates the departureboard in intervals:
-// setInterval(() => {
-//   fetchVtData(localStorage.getItem("vtInputStopId"));
-// }, 15000);
 
 //ALTERNATE DISPLAYS/UPDATES OF THE DEPARTURE BOARD:
 //Updates the departure board once per click with a timed delay:
