@@ -56,8 +56,6 @@ function fetchVtData(stationId) {
   })
     .then((response) => response.json())
     .then((result) => {
-      console.log("auth result", result);
-
       fetch(
         `https://ext-api.vasttrafik.se/pr/v4/stop-areas/${stationId}/departures`,
         {
@@ -111,29 +109,37 @@ function fetchVtData(stationId) {
             departureboard[0].estimatedTime
           );
 
-          vtSecondDpSname.textContent =
-            departureboard[1].serviceJourney.line.shortName;
-          vtSecondDpSname.style.backgroundColor =
-            departureboard[1].serviceJourney.line.backgroundColor;
-          vtSecondDpSname.style.color =
-            departureboard[1].serviceJourney.line.foregroundColor;
-          vtSecondDpDirection.textContent =
-            departureboard[1].serviceJourney.direction;
-          vtSecondDpTime.textContent = getTimeDifference(
-            departureboard[1].estimatedTime
-          );
+          vtSecondDpSname.textContent = departureboard[1]
+            ? departureboard[1].serviceJourney.line.shortName
+            : "";
+          vtSecondDpSname.style.backgroundColor = departureboard[1]
+            ? departureboard[1].serviceJourney.line.backgroundColor
+            : "";
+          vtSecondDpSname.style.color = departureboard[1]
+            ? departureboard[1].serviceJourney.line.foregroundColor
+            : "";
+          vtSecondDpDirection.textContent = departureboard[1]
+            ? departureboard[1].serviceJourney.direction
+            : "";
+          vtSecondDpTime.textContent = departureboard[1]
+            ? getTimeDifference(departureboard[1].estimatedTime)
+            : "";
 
-          vtThirdDpSname.textContent =
-            departureboard[2].serviceJourney.line.shortName;
-          vtThirdDpSname.style.backgroundColor =
-            departureboard[2].serviceJourney.line.backgroundColor;
-          vtThirdDpSname.style.color =
-            departureboard[2].serviceJourney.line.foregroundColor;
-          vtThirdDpDirection.textContent =
-            departureboard[2].serviceJourney.direction;
-          vtThirdDpTime.textContent = getTimeDifference(
-            departureboard[2].estimatedTime
-          );
+          vtThirdDpSname.textContent = departureboard[2]
+            ? departureboard[2].serviceJourney.line.shortName
+            : "";
+          vtThirdDpSname.style.backgroundColor = departureboard[2]
+            ? departureboard[2].serviceJourney.line.backgroundColor
+            : "";
+          vtThirdDpSname.style.color = departureboard[2]
+            ? departureboard[2].serviceJourney.line.foregroundColor
+            : "";
+          vtThirdDpDirection.textContent = departureboard[2]
+            ? departureboard[2].serviceJourney.direction
+            : "";
+          vtThirdDpTime.textContent = departureboard[2]
+            ? getTimeDifference(departureboard[2].estimatedTime)
+            : "";
 
           vtStationp.textContent = departureboard[0].stopPoint.name;
 
