@@ -1,7 +1,6 @@
 //////////////////////////////////////////////////////////
 // Daybox
 
-console.log("daybox");
 const dayBox = document.getElementById("daybox");
 
 function clock() {
@@ -39,36 +38,29 @@ let vtTdDpLine = document.querySelector("#td-dp-line"),
 // vtDpButton = document.querySelector("#vt-dp-button"),
 // vtDpButtonStop = document.querySelector("#vt-dp-button-stop"), ///
 
-function fetchVtData(stationId) {
-  // console.log("fetchData stationId:", JSON.stringify(stationId));
+function fetchVtNew(stationId) {
+  console.log("fetchData stationId:", JSON.stringify(stationId));
 
   if (stationId === null && localStorage.getItem("vtInputStopId") === null) {
     stationId = "9021014004940000";
   }
 
-  console.log("STATIONid", stationId);
+  console.log("Exported authToken", authToken);
 
-  // Retrieves the current date and time
-  let date = new Date(),
-    year = date.getFullYear(),
-    month = date.getMonth() + 1,
-    dayDate = date.getDate(),
-    hour = date.getHours(),
-    minuits = date.getMinutes();
-
-  fetch("https://api.vasttrafik.se/token", {
+  fetch("https://ext-api.vasttrafik.se/token", {
     body: "grant_type=client_credentials&scope=0",
     headers: {
-      Authorization:
-        "Basic MEVvUWFJNW9lbVVLajYwdWM2M3F5OUlDdlpJYTpxaXFUZWg4eFlmV0ZVMDAwMFBMYmZYSU1zeDhh",
+      Authorization: `${authToken}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
     method: "POST",
   })
     .then((response) => response.json())
     .then((result) => {
+      console.log("auth result", result);
+
       fetch(
-        `https://api.vasttrafik.se/bin/rest.exe/v2/departureBoard?id=${stationId}&date=${year}-${month}-${dayDate}&time=${hour}%3A${minuits}&format=json`,
+        `https://ext-api.vasttrafik.se/pr/v4/stop-areas/${stationId}/departures`,
         {
           headers: {
             Authorization: `Bearer ${result.access_token}`,
@@ -78,7 +70,7 @@ function fetchVtData(stationId) {
         .then((response) => response.json())
         .then((result) => {
           console.log("fetchData Resultat", result);
-          departureboard = result.DepartureBoard.Departure;
+          departureboard = result.results;
           console.log("Västtrafik", departureboard);
 
           // en början på en variant (av Jon):
@@ -95,26 +87,65 @@ function fetchVtData(stationId) {
           //     departureboard[n].sname;
           //   trs[n].querySelector(".time").textContent = departureboard[n].sname;
           // }
+          function getTimeDifference(dateTime) {
+            // Get the current time
+            const departureTime = new Date(dateTime);
 
-          vtFirstDpSname.textContent = departureboard[0].sname;
-          vtFirstDpSname.style.backgroundColor = departureboard[0].bgColor;
-          vtFirstDpSname.style.color = departureboard[0].fgColor;
-          vtFirstDpDirection.textContent = departureboard[0].direction;
-          vtFirstDpTime.textContent = departureboard[0].rtTime;
+            const now = new Date();
 
-          vtSecondDpSname.textContent = departureboard[1].sname;
-          vtSecondDpSname.style.backgroundColor = departureboard[1].bgColor;
-          vtSecondDpSname.style.color = departureboard[1].fgColor;
-          vtSecondDpDirection.textContent = departureboard[1].direction;
-          vtSecondDpTime.textContent = departureboard[1].rtTime;
+            // Calculate the difference in milliseconds
+            const diff = departureTime - now;
 
-          vtThirdDpSname.textContent = departureboard[2].sname;
-          vtThirdDpSname.style.backgroundColor = departureboard[2].bgColor;
-          vtThirdDpSname.style.color = departureboard[2].fgColor;
-          vtThirdDpDirection.textContent = departureboard[2].direction;
-          vtThirdDpTime.textContent = departureboard[2].rtTime;
+            console.log("diff", diff);
 
-          vtStationp.textContent = departureboard[0].stop;
+            // Convert milliseconds to minutes
+            const diffInMinutes = Math.floor(diff / 1000 / 60);
+            console.log("diffInMinutes", diffInMinutes);
+
+            if (diffInMinutes < 1) {
+              return `Now`;
+            } else {
+              return `${diffInMinutes} min.`;
+            }
+          }
+
+          vtFirstDpSname.textContent =
+            departureboard[0].serviceJourney.line.shortName;
+          vtFirstDpSname.style.backgroundColor =
+            departureboard[0].serviceJourney.line.backgroundColor;
+          vtFirstDpSname.style.color =
+            departureboard[0].serviceJourney.line.foregroundColor;
+          vtFirstDpDirection.textContent =
+            departureboard[0].serviceJourney.direction;
+          vtFirstDpTime.textContent = getTimeDifference(
+            departureboard[0].estimatedTime
+          );
+
+          vtSecondDpSname.textContent =
+            departureboard[1].serviceJourney.line.shortName;
+          vtSecondDpSname.style.backgroundColor =
+            departureboard[1].serviceJourney.line.backgroundColor;
+          vtSecondDpSname.style.color =
+            departureboard[1].serviceJourney.line.foregroundColor;
+          vtSecondDpDirection.textContent =
+            departureboard[1].serviceJourney.direction;
+          vtSecondDpTime.textContent = getTimeDifference(
+            departureboard[1].estimatedTime
+          );
+
+          vtThirdDpSname.textContent =
+            departureboard[2].serviceJourney.line.shortName;
+          vtThirdDpSname.style.backgroundColor =
+            departureboard[2].serviceJourney.line.backgroundColor;
+          vtThirdDpSname.style.color =
+            departureboard[2].serviceJourney.line.foregroundColor;
+          vtThirdDpDirection.textContent =
+            departureboard[2].serviceJourney.direction;
+          vtThirdDpTime.textContent = getTimeDifference(
+            departureboard[2].estimatedTime
+          );
+
+          vtStationp.textContent = departureboard[0].stopPoint.name;
 
           //the div-containern with departures is only displayed when the fetch is finished with the code below
           document.querySelector("#vtbox").style.display = "block";
@@ -122,11 +153,100 @@ function fetchVtData(stationId) {
     });
 }
 
-fetchVtData(localStorage.getItem("vtInputStopId"));
+fetchVtNew(localStorage.getItem("vtInputStopId"));
 //updates the departureboard in intervals:
 setInterval(() => {
-  fetchVtData(localStorage.getItem("vtInputStopId"));
+  fetchVtNew(localStorage.getItem("vtInputStopId"));
 }, 15000);
+
+// function fetchVtData(stationId) {
+//   // console.log("fetchData stationId:", JSON.stringify(stationId));
+
+//   if (stationId === null && localStorage.getItem("vtInputStopId") === null) {
+//     stationId = "9021014004940000";
+//   }
+
+//   console.log("STATIONid", stationId);
+
+//   // Retrieves the current date and time
+//   let date = new Date(),
+//     year = date.getFullYear(),
+//     month = date.getMonth() + 1,
+//     dayDate = date.getDate(),
+//     hour = date.getHours(),
+//     minuits = date.getMinutes();
+
+//   fetch("https://api.vasttrafik.se/token", {
+//     body: "grant_type=client_credentials&scope=0",
+//     headers: {
+//       Authorization:
+//         "Basic MEVvUWFJNW9lbVVLajYwdWM2M3F5OUlDdlpJYTpxaXFUZWg4eFlmV0ZVMDAwMFBMYmZYSU1zeDhh",
+//       "Content-Type": "application/x-www-form-urlencoded",
+//     },
+//     method: "POST",
+//   })
+//     .then((response) => response.json())
+//     .then((result) => {
+//       fetch(
+//         `https://api.vasttrafik.se/bin/rest.exe/v2/departureBoard?id=${stationId}&date=${year}-${month}-${dayDate}&time=${hour}%3A${minuits}&format=json`,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${result.access_token}`,
+//           },
+//         }
+//       )
+//         .then((response) => response.json())
+//         .then((result) => {
+//           console.log("fetchData Resultat", result);
+//           departureboard = result.DepartureBoard.Departure;
+//           console.log("Västtrafik", departureboard);
+
+//           // en början på en variant (av Jon):
+//           // const a = [vtFirstDpSname, vtSecondDpSname, vtThirdDpSname];
+
+//           // troligen en lösning som fixar hela paketet med en loop (av Jon):
+//           // const trs = document.querySelector("tr");
+
+//           // // Skip first tr due to headings
+//           // for (let n = 1; n < trs.length; n++) {
+//           //   trs[n].querySelector(".sname").textContent =
+//           //     departureboard[n].sname;
+//           //   trs[n].querySelector(".direction").textContent =
+//           //     departureboard[n].sname;
+//           //   trs[n].querySelector(".time").textContent = departureboard[n].sname;
+//           // }
+
+//           vtFirstDpSname.textContent = departureboard[0].sname;
+//           vtFirstDpSname.style.backgroundColor = departureboard[0].bgColor;
+//           vtFirstDpSname.style.color = departureboard[0].fgColor;
+//           vtFirstDpDirection.textContent = departureboard[0].direction;
+//           vtFirstDpTime.textContent = departureboard[0].rtTime;
+
+//           vtSecondDpSname.textContent = departureboard[1].sname;
+//           vtSecondDpSname.style.backgroundColor = departureboard[1].bgColor;
+//           vtSecondDpSname.style.color = departureboard[1].fgColor;
+//           vtSecondDpDirection.textContent = departureboard[1].direction;
+//           vtSecondDpTime.textContent = departureboard[1].rtTime;
+
+//           vtThirdDpSname.textContent = departureboard[2].sname;
+//           vtThirdDpSname.style.backgroundColor = departureboard[2].bgColor;
+//           vtThirdDpSname.style.color = departureboard[2].fgColor;
+//           vtThirdDpDirection.textContent = departureboard[2].direction;
+//           vtThirdDpTime.textContent = departureboard[2].rtTime;
+
+//           vtStationp.textContent = departureboard[0].stop;
+
+//           //the div-containern with departures is only displayed when the fetch is finished with the code below
+//           document.querySelector("#vtbox").style.display = "block";
+//         });
+//     });
+// }
+
+// fetchVtData(localStorage.getItem("vtInputStopId"));
+// //updates the departureboard in intervals:
+// setInterval(() => {
+//   fetchVtData(localStorage.getItem("vtInputStopId"));
+// }, 15000);
 
 //ALTERNATE DISPLAYS/UPDATES OF THE DEPARTURE BOARD:
 //Updates the departure board once per click with a timed delay:
@@ -169,14 +289,8 @@ if (localStorage.getItem("animeBoxAnime")) {
 fetch(`https://animechan.xyz/api/random/anime?title=${animeTitle}`)
   .then((response) => response.json())
   .then((quote) => {
-    console.log(quote);
     animeQuote.textContent = `"${quote.quote}"`;
     animeChar.textContent = `-- ${quote.character}  (${quote.anime})`;
-    // if (localStorage.getItem("animeBoxQuote") !== null) {
-    //   animeBox.textContent = localStorage.getItem("animeBoxQuote");
-    // } else {
-    //   animeBox.textContent = `${quote.quote}  -- ${quote.character}  (${quote.anime})`;
-    // }
   });
 
 ///////////////////////////////////////////////////////////////////
@@ -209,7 +323,7 @@ function weatherStart() {
   if (localStorage.getItem("weatherLatitude") !== null) {
     latitude = localStorage.getItem("weatherLatitude");
     longitude = localStorage.getItem("weatherLongitude");
-    console.log("LON LAT", longitude, latitude);
+    // console.log("LON LAT", longitude, latitude);
   } else {
     latitude = "57.7088700";
     longitude = "11.9745600";
@@ -236,8 +350,8 @@ function fetchWeather(lat, lon) {
   )
     .then((response) => response.json())
     .then((now) => {
-      console.log("weather", now);
-      console.log("weatherTempNow", now.main.temp);
+      // console.log("weather", now);
+      // console.log("weatherTempNow", now.main.temp);
 
       // ref: https://www.epochconverter.com/programming/#javascript
       sunrise = new Date(now.sys.sunrise * 1000);
@@ -261,7 +375,7 @@ function fetchForecast(lon, lat) {
   )
     .then((response) => response.json())
     .then((forecast) => {
-      console.log("Forecast", forecast);
+      // console.log("Forecast", forecast);
 
       weatherWindForecast.textContent = "";
       weatherPcpnForecast.textContent = "";

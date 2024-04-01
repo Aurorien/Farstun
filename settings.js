@@ -69,11 +69,10 @@ function fetchStation(stationName) {
   // encode characters the so they work in query param
   const stopName = encodeURIComponent(stationName);
 
-  fetch("https://api.vasttrafik.se/token", {
+  fetch("https://ext-api.vasttrafik.se/token", {
     body: "grant_type=client_credentials&scope=0",
     headers: {
-      Authorization:
-        "Basic MEVvUWFJNW9lbVVLajYwdWM2M3F5OUlDdlpJYTpxaXFUZWg4eFlmV0ZVMDAwMFBMYmZYSU1zeDhh",
+      Authorization: `${authToken}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
     method: "POST",
@@ -81,7 +80,7 @@ function fetchStation(stationName) {
     .then((response) => response.json())
     .then((result) => {
       fetch(
-        `https://api.vasttrafik.se/bin/rest.exe/v2/location.name?input=${stopName}&format=json`,
+        `https://ext-api.vasttrafik.se/pr/v4/locations/by-text?q=${stopName}&limit=10&offset=0`,
         {
           headers: {
             Authorization: `Bearer ${result.access_token}`,
@@ -90,24 +89,21 @@ function fetchStation(stationName) {
       )
         .then((response) => response.json())
         .then((result) => {
-          // console.log("fetchStation Resultat", result);
+          console.log("fetchStation Resultat", result);
 
           let stopArray = [];
 
           //avoids general places id that cannot show as one station
-          const firstFourStopLocations = result.LocationList.StopLocation.slice(
-            0,
-            4
-          );
+          const firstFourStopLocations = result.results.slice(0, 4);
           const filteredStopLocations = firstFourStopLocations.filter(
-            (location) => location.id.slice(0, 14) !== "00000008000000"
+            (location) => location.gid.slice(0, 14) !== "00000008000000"
           );
 
           stopArray.push(...filteredStopLocations);
-          // console.log("STOParray", stopArray);
+          console.log("STOParray", stopArray);
 
           //makes a list of object filtered to only the keys and values needed
-          const selectedKeys = ["name", "id"];
+          const selectedKeys = ["name", "gid"];
 
           filteredstopArray = stopArray.map((obj) =>
             selectedKeys.reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {})
@@ -360,15 +356,14 @@ localStorage.setItem(
 
 ////////////////////////////////////
 changeButton.addEventListener("click", () => {
-  console.log("animeBoxAnimeInput.value", animeBoxAnimeInput.value);
-  console.log("filteredstopArray", filteredstopArray);
+  // console.log("animeBoxAnimeInput.value", animeBoxAnimeInput.value);
+  // console.log("filteredstopArray", filteredstopArray);
 
   if (weatherPlaceInput.value !== "") {
-    console.log("Hej1");
     const weatherObjectSelected = weatherPlaceArray.filter((obj) =>
       weatherPlaceInput.value.includes(obj.city)
     );
-    console.log(" weatherObjectSelected", weatherObjectSelected);
+    // console.log(" weatherObjectSelected", weatherObjectSelected);
     localStorage.setItem("weatherLatitude", weatherObjectSelected[0].latitude);
     localStorage.setItem(
       "weatherLongitude",
@@ -379,9 +374,8 @@ changeButton.addEventListener("click", () => {
   }
   //
   if (animeBoxAnimeInput.value) {
-    console.log("Hej2");
     const animeResultArray = fetchAnimeBox(animeBoxAnimeInput.value);
-    console.log("animeResultArray", animeResultArray);
+    // console.log("animeResultArray", animeResultArray);
     localStorage.setItem(
       "animeBoxQuote",
       `${animeResultArray.quote}  -- ${animeResultArray.character}  (${animeResultArray.anime})`
@@ -391,23 +385,15 @@ changeButton.addEventListener("click", () => {
   }
 
   // look for the object in filteredstopArray whoose key name has the same value as vtInputStop.value and from that object get the value of the key id
-  console.log("vtInputStop.value", vtInputStop.value);
 
   if (vtInputStop.value) {
-    console.log("Hej3");
-    console.log("filteredstopArray", filteredstopArray);
-
     const vtObjectSelected = filteredstopArray.filter((obj) =>
       vtInputStop.value.includes(obj.name)
     );
-    console.log("vtObjectSelected", vtObjectSelected);
-
-    localStorage.setItem("vtInputStopId", vtObjectSelected[0].id);
+    localStorage.setItem("vtInputStopId", vtObjectSelected[0].gid);
     localStorage.setItem("vtInputStop", vtInputStop.value);
     vtInputStop.value = null;
-    // location.reload();
   }
-  console.log("Location Reload");
   location.reload();
 });
 
