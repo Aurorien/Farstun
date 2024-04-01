@@ -155,21 +155,23 @@ setInterval(() => {
 ///////////////////////////////////////////////////////////////////
 //Animebox:
 
-let animeBox = document.querySelector("#animebox"),
-  x;
+let animeQuote = document.querySelector("#animequote"),
+  animeChar = document.querySelector("#animechar"),
+  animeTitle;
 
 if (localStorage.getItem("animeBoxAnime")) {
-  x = encodeURIComponent(localStorage.getItem("animeBoxAnime"));
+  animeTitle = encodeURIComponent(localStorage.getItem("animeBoxAnime"));
 } else {
-  x = "Naruto";
-  localStorage.setItem("animeBoxAnime", x);
+  animeTitle = "Naruto";
+  localStorage.setItem("animeBoxAnime", animeTitle);
 }
 
-fetch(`https://animechan.vercel.app/api/random/anime?title=${x}`)
+fetch(`https://animechan.xyz/api/random/anime?title=${animeTitle}`)
   .then((response) => response.json())
   .then((quote) => {
     console.log(quote);
-    animeBox.textContent = `${quote.quote}  -- ${quote.character}  (${quote.anime})`;
+    animeQuote.textContent = `"${quote.quote}"`;
+    animeChar.textContent = `-- ${quote.character}  (${quote.anime})`;
     // if (localStorage.getItem("animeBoxQuote") !== null) {
     //   animeBox.textContent = localStorage.getItem("animeBoxQuote");
     // } else {

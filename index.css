@@ -114,12 +114,22 @@ body {
 
 #animebox {
   grid-area: animebox;
-  white-space: normal; /* Får texten att rymmas inom diven */
-  padding: 15px 0 10px 0px;
   height: max-content;
+  width: max-content;
+  padding: 17px 0;
   background-color: rgba(22, 32, 32, 0.8);
   color: white;
   font-size: 1.1rem;
+}
+
+#animequote {
+  margin: 0 20px 7px 5px;
+}
+
+#animechar {
+  margin: 0 0 0 15px;
+  font-size: 0.9rem;
+  font-style: italic;
 }
 
 /* Daybox: */
