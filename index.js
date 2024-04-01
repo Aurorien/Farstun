@@ -97,17 +97,21 @@ function fetchVtData(stationId) {
             }
           }
 
-          vtFirstDpSname.textContent =
-            departureboard[0].serviceJourney.line.shortName;
-          vtFirstDpSname.style.backgroundColor =
-            departureboard[0].serviceJourney.line.backgroundColor;
-          vtFirstDpSname.style.color =
-            departureboard[0].serviceJourney.line.foregroundColor;
-          vtFirstDpDirection.textContent =
-            departureboard[0].serviceJourney.direction;
-          vtFirstDpTime.textContent = getTimeDifference(
-            departureboard[0].estimatedTime
-          );
+          vtFirstDpSname.textContent = departureboard[0]
+            ? departureboard[0].serviceJourney.line.shortName
+            : "";
+          vtFirstDpSname.style.backgroundColor = departureboard[0]
+            ? departureboard[0].serviceJourney.line.backgroundColor
+            : "";
+          vtFirstDpSname.style.color = departureboard[0]
+            ? departureboard[0].serviceJourney.line.foregroundColor
+            : "";
+          vtFirstDpDirection.textContent = departureboard[0]
+            ? departureboard[0].serviceJourney.direction
+            : "";
+          vtFirstDpTime.textContent = departureboard[0]
+            ? getTimeDifference(departureboard[0].estimatedTime)
+            : "";
 
           vtSecondDpSname.textContent = departureboard[1]
             ? departureboard[1].serviceJourney.line.shortName
