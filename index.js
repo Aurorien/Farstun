@@ -45,12 +45,12 @@ function fetchVtNew(stationId) {
     stationId = "9021014004940000";
   }
 
-  console.log("Exported authToken", authToken);
+  console.log("Exported authToken", AUTHTOKEN);
 
   fetch("https://ext-api.vasttrafik.se/token", {
     body: "grant_type=client_credentials&scope=0",
     headers: {
-      Authorization: `${authToken}`,
+      Authorization: `${AUTHTOKEN}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
     method: "POST",
