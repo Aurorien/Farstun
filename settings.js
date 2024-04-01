@@ -72,7 +72,7 @@ function fetchStation(stationName) {
   fetch("https://ext-api.vasttrafik.se/token", {
     body: "grant_type=client_credentials&scope=0",
     headers: {
-      Authorization: `${authToken}`,
+      Authorization: `${AUTHTOKEN}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
     method: "POST",
