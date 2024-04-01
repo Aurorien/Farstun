@@ -184,8 +184,8 @@ th {
   padding: 10px 20px 5px 5px;
 }
 
-#th-dp-line {
-  padding-left: 10px;
+.dp-line {
+  padding-left: 18px;
 }
 
 td {
@@ -206,6 +206,13 @@ td {
 #third-dp-time {
   font-weight: bold;
   padding-right: 7px;
+}
+
+#th-dp-next,
+#first-dp-time,
+#second-dp-time,
+#third-dp-time {
+  width: 65px;
 }
 
 #vt-dp-table {
