@@ -115,7 +115,7 @@ body {
 #animebox {
   grid-area: animebox;
   height: max-content;
-  width: max-content;
+  max-width: 600px;
   padding: 17px 0;
   background-color: rgba(22, 32, 32, 0.8);
   color: white;
