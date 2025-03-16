@@ -1,6 +1,3 @@
-///////////////////////////////////////////////////////////////////
-//General functions:
-
 // Makes array values to li elements and put them in an ul that exists in the html, and then one can make choices by clicking in the dropdown list
 function dropdownSuggestions(array, list, input, button) {
   list.innerHTML = "";
@@ -24,7 +21,7 @@ function dropdownSuggestions(array, list, input, button) {
 }
 
 // Filters out, from an array, the values that include the input value
-//(only used so far in the Settings anime quotes)
+// (only used so far in the Settings anime quotes)
 function filterSearch(array, searchInput) {
   return array.filter((x) =>
     x.toLowerCase().includes(searchInput.toLowerCase())
@@ -45,16 +42,12 @@ document.addEventListener("click", (event) => {
   }
 });
 
-//////////////////////
-
 const changeButton = document.querySelector("#change-button");
-
 changeButton.disabled = true;
 
 ///////////////////////////////////////////////////////////////////
-//Settings Västtrafik:
+// Settings Västtrafik:
 
-let stopId;
 const vtInputStop = document.querySelector("#stop-name"),
   // vtButtonStop = document.querySelector("#stop-name-button"),
   vtSuggUl = document.querySelector("#vt-sugglist");
@@ -62,7 +55,7 @@ let filteredstopArray;
 
 // vtButtonStop.disabled = true;
 
-//get station by input name
+// get station by input name
 function fetchStation(stationName) {
   // encode characters the so they work in query param
   const stopName = encodeURIComponent(stationName);
@@ -92,7 +85,7 @@ function fetchStation(stationName) {
 
           let stopArray = [];
 
-          //avoids general places id that cannot show as one station
+          // avoids general places id that cannot show as one station
           const firstFourStopLocations = result.results.slice(0, 4);
           const filteredStopLocations = firstFourStopLocations.filter(
             (location) => location.gid.slice(0, 14) !== "00000008000000"
@@ -101,7 +94,7 @@ function fetchStation(stationName) {
           stopArray.push(...filteredStopLocations);
           console.log("STOParray", stopArray);
 
-          //makes a list of object filtered to only the keys and values needed
+          // makes a list of object filtered to only the keys and values needed
           const selectedKeys = ["name", "gid"];
 
           filteredstopArray = stopArray.map((obj) =>
@@ -116,7 +109,7 @@ function fetchStation(stationName) {
             filtList.push(obj.name);
           });
 
-          //makes so it's always three in the list that will be sent to the dropdownfunction and displayed in the dropdown
+          // makes so it's always three in the list that will be sent to the dropdownfunction and displayed in the dropdown
           if (filtList.length > 3) {
             filtList = filtList.slice(0, 3);
           }
@@ -142,7 +135,7 @@ if (localStorage.getItem("vtInputStop")) {
 }
 
 ///////////////////////////////////////////////////////////////////
-//Settings Weather:
+// Settings Weather:
 // getting geocoding by https://papilite.se/
 
 const weatherPlaceInput = document.querySelector("#set-weather-place"),
@@ -201,9 +194,9 @@ if (localStorage.getItem("weatherPlace")) {
 }
 
 ///////////////////////////////////////////////////////////////////
-//Settings Anime quotes:
+// Settings Anime quotes:
 // ref. autocomplete-function with dropdown: https://www.youtube.com/watch?v=OPnPqc9YWSA
-//the API info webpage: https://animechan.vercel.app/
+// the API info webpage: https://animechan.vercel.app/
 
 const animeList = [
   "Fullmetal Alchemist",
@@ -353,7 +346,6 @@ localStorage.setItem(
   "As long as you don't give up, you can still be saved! -- Hatake Kakashi"
 );
 
-////////////////////////////////////
 changeButton.addEventListener("click", () => {
   // console.log("animeBoxAnimeInput.value", animeBoxAnimeInput.value);
   // console.log("filteredstopArray", filteredstopArray);
@@ -395,241 +387,3 @@ changeButton.addEventListener("click", () => {
   }
   location.reload();
 });
-
-///////////////////////////////////////////////////////////////////
-// Cities-tjänsten
-
-const citiesInitialGetButton = document.querySelector(
-    "#cities-initial-get-button"
-  ),
-  showCities = document.getElementById("settings-cities");
-
-citiesInitialGetButton.addEventListener("click", getCities);
-
-let citiesPatchButton,
-  citiesDeleteButton,
-  citiesGetButton,
-  cityName = [];
-
-function getCities() {
-  let str;
-  fetch("https://avancera.app/cities/")
-    .then((sendFor) => sendFor.json())
-    .then((got) => {
-      // console.log("FETCHgetCITIES", got);
-      str = `
-      <h1>Cities-tjänsten</h1>
-
-      <table class='temp-table'>Resultat:
-      <tr>
-        <th class='tempdiv-th'>Id: </th>
-        <th class='tempdiv-th'>Namn: </th>
-        <th class='tempdiv-th'>Antal invånare: </th>
-      </tr>
-       `;
-      // console.log("STR", str);
-
-      got.forEach((city) => {
-        // console.log("GOT", got);
-        cityName.push(city.name);
-        str += `
-      <tr  onClick="onClickTr(event)" class= 'tempdiv-tr' value='${city.id}' style=''>
-        <td class= 'tempdiv-td' name= 'id' >${city.id}</td>
-        <td class= 'tempdiv-td'><input class='temp-input' name= 'name' value='${city.name}'></></td>
-        <td class= 'tempdiv-td'><input class='temp-input' name= 'pop' value='${city.population}'></></td>
-      </tr>
-        `;
-
-        // console.log("STR2", str);
-      });
-
-      showCities.innerHTML = `${str}</table>
-      <input id="cities-get-button" type="button" value="Hämta" />
-      <input id="cities-patch-button" type="button" value="Spara" />
-      <input id="cities-delete-button" type="button" value="Radera" />
-      <form>
-        <fieldset id="post-menu">
-          <legend>Lägg till stad:</legend>
-          <label for="post-name">Namn på staden: </label>
-          <input id="post-name" type="text" placeholder="" />
-          <label for="post-pop">Antal invånare i staden: </label>
-          <input id="post-pop" type="text" placeholder="" value="0" />
-          <input id="cities-post-button" type="button" value="Lägg till" />
-        </fieldset>
-      </form>
-      `;
-
-      const postName = document.querySelector("#post-name"),
-        postPop = document.querySelector("#post-pop"),
-        citiesPostButton = document.querySelector("#cities-post-button");
-      let sendName, sendPop;
-      citiesGetButton = document.querySelector("#cities-get-button");
-      citiesPatchButton = document.querySelector("#cities-patch-button");
-      citiesDeleteButton = document.querySelector("#cities-delete-button");
-
-      citiesPostButton.disabled = true;
-      citiesPatchButton.disabled = true;
-      citiesDeleteButton.disabled = true;
-
-      // to get again
-      citiesGetButton.addEventListener("click", getCities);
-
-      // for the Lägg till-function
-      postName.addEventListener("input", () => {
-        if (
-          postName.value.trim() !== "" &&
-          isNaN(postName.value.trim()) === true
-        ) {
-          citiesPostButton.disabled = false;
-          sendName = postName.value;
-        } else {
-          citiesPostButton.disabled = true;
-        }
-      });
-      postPop.addEventListener("input", () => {
-        if (
-          postPop.value.trim() !== "" &&
-          isNaN(postPop.value.trim()) === false
-        ) {
-          citiesPostButton.disabled = false;
-          sendPop = postPop.value;
-        } else {
-          citiesPostButton.disabled = true;
-        }
-      });
-
-      citiesPostButton.addEventListener("click", () => {
-        // console.log("SEND", sendName, sendPop);
-        postCities(sendName, Number(sendPop));
-      });
-
-      // for the Redigera-function
-      citiesPatchButton.addEventListener("click", () => {
-        const trVarNodes = document.querySelectorAll(".tempdiv-tr");
-
-        for (let i = 0; i < trVarNodes.length; i++) {
-          let idCity, nameCity, popCity;
-
-          idCity = trVarNodes[i].querySelectorAll("td")[0].textContent;
-          nameCity = trVarNodes[i].querySelectorAll("td")[1].firstChild.value;
-          popCity = trVarNodes[i].querySelectorAll("td")[2].firstChild.value;
-
-          editCities(idCity, nameCity, Number(popCity), i);
-          // console.log("FOR PatchButton", idCity, nameCity, Number(popCity), i);
-        }
-      });
-    });
-}
-
-function onClickTr(event) {
-  // onClick samt currentTarget ref: https://stackoverflow.com/questions/68634930/how-to-get-current-td-value-from-table-onclick
-
-  // Turns on and shuts of the visual marking/highlight
-  const tr = document.querySelectorAll("tr");
-  tr.forEach((element) => {
-    element.classList.remove("tr-clicked");
-  });
-  event.currentTarget.classList.add("tr-clicked");
-
-  // Name and population:
-  console.log("event.currentTarget.children", event.currentTarget.children);
-
-  //  använd på nedan kod: event.currentTarget.querySelector('p')
-  let onClickId = event.currentTarget.children[0].textContent,
-    onClickName = event.currentTarget.children[1].children[0],
-    patchName = event.currentTarget.children[1].children[0].value,
-    onClickPop = event.currentTarget.children[2].children[0],
-    patchPop = event.currentTarget.children[2].children[0].value;
-
-  onClickName.addEventListener("input", () => {
-    if (
-      onClickName.value.trim() !== "" &&
-      isNaN(onClickName.value.trim()) === true
-    ) {
-      citiesPatchButton.disabled = false;
-      patchName = onClickName.value;
-    } else {
-      citiesPatchButton.disabled = true;
-    }
-  });
-
-  onClickPop.addEventListener("input", () => {
-    if (
-      onClickPop.value.trim() !== "" &&
-      isNaN(onClickPop.value.trim()) === false
-    ) {
-      citiesPatchButton.disabled = false;
-      patchPop = onClickPop.value;
-    } else {
-      citiesPatchButton.disabled = true;
-    }
-  });
-
-  citiesDeleteButton.disabled = false;
-
-  // every id that has been clicked gets erased in theese two solutions below, fix so only the current clicked city gets erased when one click the erase button
-
-  // citiesDeleteButton.addEventListener("click", () => {
-  //   deleteCities(onClickId);
-  // });
-
-  deleteCities(onClickId);
-}
-
-function postCities(name, pop) {
-  fetch("https://avancera.app/cities/", {
-    body: JSON.stringify({ name: name, population: pop }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-  })
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      getCities();
-    });
-}
-
-function editCities(id, namn, befolkning, i) {
-  let stringifyArgument;
-
-  if (namn === cityName[i]) {
-    namn = null;
-  }
-
-  if (namn !== null && befolkning === 0) {
-    stringifyArgument = { name: namn };
-  } else if (namn === null && befolkning !== 0) {
-    stringifyArgument = { population: befolkning };
-  } else {
-    stringifyArgument = { name: namn, population: befolkning };
-  }
-  // console.log("stringifyArgument", stringifyArgument);
-
-  fetch("https://avancera.app/cities/" + id, {
-    method: "PATCH",
-    body: JSON.stringify(stringifyArgument),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json)
-    .then((result) => {
-      console.log(result);
-      getCities();
-    });
-}
-
-function deleteCities(idNum) {
-  // console.log("ID", idNum);
-
-  citiesDeleteButton.addEventListener("click", () => {
-    fetch("https://avancera.app/cities/" + idNum, { method: "DELETE" }).then(
-      (result) => {
-        console.log(result);
-        getCities();
-      }
-    );
-  });
-}
