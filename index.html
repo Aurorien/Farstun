@@ -16,37 +16,48 @@
   </head>
   <body>
     <div id="weatherbox">
-      <div id="weather-pcpnbox">
-        <h1 id="weather-h1-pcpn">Väder i Göteborg</h1>
-        <p id="weather-pcpn-now"></p>
-        <h2 class="forecast-topic">Väder Prognos</h2>
-        <p class="forecast" id="weather-pcpn-forecast"></p>
+      <h1 id="weather-h1-pcpn">Väder i Göteborg</h1>
+      <div id="weather">
+        <div id="weather-pcpnbox">
+          <p id="weather-pcpn-now"></p>
+          <h2 class="forecast-topic">Väder-prognos</h2>
+          <p class="forecast" id="weather-pcpn-forecast"></p>
+        </div>
+        <div id="weather-windbox">
+          <h2 class="weather-topic" id="weather-h2-wind">Vind</h2>
+          <p id="weather-wind-now"></p>
+          <h3 class="forecast-topic">Vind-prognos</h3>
+          <p class="forecast" id="weather-wind-forecast"></p>
+        </div>
+        <div id="weather-tempbox">
+          <h2 class="weather-topic" id="weather-h2-temp">Temperatur</h2>
+          <p id="weather-temp-now"></p>
+          <h3 class="forecast-topic">Temperatur-prognos</h3>
+          <p class="forecast" id="weather-temp-forecast"></p>
+        </div>
+        <canvas id="canvas" with="30" height="50"></canvas>
       </div>
-      <div id="weather-windbox">
-        <h2 class="weather-topic" id="weather-h2-wind">Vind</h2>
-        <p id="weather-wind-now"></p>
-        <h3 class="forecast-topic">Vind Prognos</h3>
-        <p class="forecast" id="weather-wind-forecast"></p>
-      </div>
-      <div id="weather-tempbox">
-        <h2 class="weather-topic" id="weather-h2-temp">Temperatur</h2>
-        <p id="weather-temp-now"></p>
-        <h3 class="forecast-topic">Temperatur Prognos</h3>
-        <p class="forecast" id="weather-temp-forecast"></p>
-      </div>
-      <canvas id="canvas" with="30" height="50"></canvas>
     </div>
     <div id="weather-sunbox">
       <h2 class="weather-topic" id="weather-h2-sun">Solens upp- och nedgång</h2>
       <p id="weather-sunrise"></p>
       <p id="weather-sunset"></p>
     </div>
-     <!-- animebox is temporary disabled due to external api temporary shutdown -->
+    <!-- animebox is temporary disabled due to external api temporary shutdown -->
     <!-- <div id="animebox">
       <p id="animequote">animequote</p>
       <p id="animechar">character</p>
     </div> -->
-    <div id="daybox"></div>
+    <div id="daybox">
+      <div class="daybox-div">
+        <h1 class="daybox-h1">Datum:</h1>
+        <p id="date" class="daybox-p"></p>
+      </div>
+      <div class="daybox-div">
+        <h1 class="daybox-h1">Tid:</h1>
+        <div id="time" class="daybox-p"></div>
+      </div>
+    </div>
     <div id="vtbox">
       <h2 id="vt-topic">Västtrafik Avgångstavla</h2>
       <p id="vt-station-p"></p>

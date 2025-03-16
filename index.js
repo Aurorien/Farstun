@@ -1,15 +1,16 @@
 //////////////////////////////////////////////////////////
 // Daybox
 
-const dayBox = document.getElementById("daybox");
+const dayBoxDate = document.getElementById("date");
+const dayBoxTime = document.getElementById("time");
 
 function clock() {
   const dateDaybox = new Date(),
     time = dateDaybox.toTimeString();
 
-  dayBox.textContent = `Datum: ${dateDaybox.toLocaleDateString(
-    "sv-SE"
-  )} \n\nTid: ${time.substring(0, 8)}`;
+  dayBoxDate.textContent = `${dateDaybox.toLocaleDateString("sv-SE")}`;
+
+  dayBoxTime.textContent = `${time.substring(0, 8)}`;
 }
 
 const oneSecond = 1000;
@@ -321,7 +322,6 @@ function chartTemp(forecast) {
   for (let i = 0; i < 5; i++) {
     chartArray.push(forecast.list[i].main.temp);
   }
-  // console.log("CHARTARRAY", chartArray);
   const labels = ["Idag", "Imorgon", "om 2 dagar", "om 3 dagar", "om 4 dagar"];
 
   const data = {
