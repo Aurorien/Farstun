@@ -32,11 +32,17 @@ body {
   justify-content: space-between;
 }
 
+label {
+  margin-top: 7px;
+}
+
 .set-button {
   background-color: #2a4920;
   color: rgb(229, 215, 252);
   border-radius: 100%;
   border-color: #0564b8;
+  margin-top: 20px;
+  margin-right: 10px;
   padding: 7px 10px;
   font-family: cosmo;
   font-size: 0.6rem;
