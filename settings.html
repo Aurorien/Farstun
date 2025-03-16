@@ -13,74 +13,66 @@
   </head>
   <!-- Jon-input: *klar*form, fieldset (för tillgänglighet), submit-typ för knapparna (buttons istället?), preventDefault -->
   <body>
-    <form id="settings">
-      <!-- <fieldset> -->
-      <!-- <legend id="settings-h1">Inställningar</legend> -->
-      <h1 id="settings-h1">Inställningar</h1>
-      <div class="set" id="settings-weather">
-        <label for="set-weather-place">Väder- Ändra ort:</label>
-        <div class="sugg">
-          <input
-            class="set-input"
-            id="set-weather-place"
-            placeholder="Ort..."
-            type="text"
-          />
-          <ul class="dropdown" id="weather-sugglist"></ul>
+    <div id="image-container">
+      <form id="settings">
+        <!-- <fieldset> -->
+        <!-- <legend id="settings-h1">Inställningar</legend> -->
+        <h1 id="settings-h1">Inställningar</h1>
+        <div class="set" id="settings-weather">
+          <label for="set-weather-place">Väder- Ändra ort:</label>
+          <div class="sugg">
+            <input
+              class="set-input"
+              id="set-weather-place"
+              placeholder="Ort..."
+              type="text"
+            />
+            <ul class="dropdown" id="weather-sugglist"></ul>
+          </div>
         </div>
-      </div>
-      <div class="set" id="settings-anime">
-        <label for="set-anime" id="anime-label">Citat- Ändra anime:</label>
-        <div class="sugg">
-          <input
-            class="set-input"
-            id="set-anime"
-            placeholder="Titel..."
-            type="text"
-          />
-          <ul class="dropdown" id="anime-sugglist"></ul>
+        <div class="set" id="settings-anime">
+          <label for="set-anime" id="anime-label">Citat- Ändra anime:</label>
+          <div class="sugg">
+            <input
+              class="set-input"
+              id="set-anime"
+              placeholder="Titel..."
+              type="text"
+            />
+            <ul class="dropdown" id="anime-sugglist"></ul>
+          </div>
         </div>
-      </div>
-      <div class="set" id="settings-vt">
-        <label for="stop-name">Västtrafik Avgångstavla- Ändra hållplats:</label>
-        <div class="sugg">
-          <input
-            class="set-input"
-            id="stop-name"
-            placeholder="Hållplats..."
-            type="text"
-          />
-          <ul class="dropdown" id="vt-sugglist"></ul>
+        <div class="set" id="settings-vt">
+          <label for="stop-name"
+            >Västtrafik Avgångstavla- Ändra hållplats:</label
+          >
+          <div class="sugg">
+            <input
+              class="set-input"
+              id="stop-name"
+              placeholder="Hållplats..."
+              type="text"
+            />
+            <ul class="dropdown" id="vt-sugglist"></ul>
+          </div>
         </div>
-      </div>
-      <input
-        class="set-button"
-        id="change-button"
-        type="button"
-        value="Ändra"
-      />
-      <!-- </fieldset> -->
-    </form>
-    <footer id="footer-settings">
-      <div id="settings-cities">
-        <h1>Cities-tjänsten</h1>
-        <label for="cities-initial-get-button"
-          >Tryck på knappen för att hämta städerna</label
-        >
         <input
           class="set-button"
-          id="cities-initial-get-button"
+          id="change-button"
           type="button"
-          value="Hämta"
+          value="Ändra"
         />
-      </div>
-      <nav id="nav-settings">
-        <div id="set-home-link">
-          <a href="index.html">Tillbaka</a>
-        </div>
-        <i class="bi bi-arrow-return-left" id="arrow"></i>
-      </nav>
-    </footer>
-    <script src="settings.js"></script>
+        <!-- </fieldset> -->
+      </form>
+      <footer id="footer-settings">
+        <nav id="nav-settings">
+          <div id="set-home-link">
+            <a href="index.html">Tillbaka</a>
+          </div>
+          <i class="bi bi-arrow-return-left" id="arrow"></i>
+        </nav>
+      </footer>
+      <script src="settings.js"></script>
+    </div>
   </body>
 </html>

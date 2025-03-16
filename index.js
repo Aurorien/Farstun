@@ -20,9 +20,9 @@ setInterval(clock, oneSecond);
 // APIs from: https://developer.vasttrafik.se/portal/#/
 // ".../departureBoard, behöver man exempelvis inte anropa mer än var 10:e sekund, då data inte uppdateras mer frekvent än så."
 
-let vtTdDpLine = document.querySelector("#td-dp-line"),
-  vtTdDpNext = document.querySelector("#td-dp-next"),
-  vtTable = document.querySelector("#vt-dp-table"),
+let // vtTdDpLine = document.querySelector("#td-dp-line"),
+  //   vtTdDpNext = document.querySelector("#td-dp-next"),
+  //   vtTable = document.querySelector("#vt-dp-table"),
   vtFirstDpSname = document.querySelector("#first-dp-sname"),
   vtFirstDpDirection = document.querySelector("#first-dp-direction"),
   vtFirstDpTime = document.querySelector("#first-dp-time"),
@@ -209,23 +209,18 @@ fetch(`https://animechan.xyz/api/random/anime?title=${animeTitle}`)
 // https://openweathermap.org/
 // https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid=***REMOVED***
 
-const weatherH2Temp = document.querySelector("#weather-h2-temp"),
-  weatherTempNow = document.querySelector("#weather-temp-now"),
+const weatherTempNow = document.querySelector("#weather-temp-now"),
   weatherTempForecast = document.querySelector("#weather-temp-forecast"),
   weatherH2Pcpn = document.querySelector("#weather-h1-pcpn"),
   weatherPcpnNow = document.querySelector("#weather-pcpn-now"),
   weatherPcpnForecast = document.querySelector("#weather-pcpn-forecast"),
-  weatherH2Wind = document.querySelector("#weather-h2-wind"),
   weatherWindNow = document.querySelector("#weather-wind-now"),
   weatherWindForecast = document.querySelector("#weather-wind-forecast"),
-  weatherH2Sun = document.querySelector("#weather-h2-sun"),
   weatherSunrise = document.querySelector("#weather-sunrise"),
   weatherSunset = document.querySelector("#weather-sunset");
 
-let place,
-  lon,
-  lat,
-  city,
+let longitude,
+  latitude,
   sunrise,
   sunset,
   canvas = null;
@@ -357,17 +352,19 @@ function chartTemp(forecast) {
 ///////////////////////////////////////////////////////////////////
 // Path to Settings
 
-const gear = document.querySelector("#gear-index");
+// const gear = document.querySelector("#gear-index");
 
-function onBurgerClick() {
-  const insideBurger = document.querySelector("#link-index");
+// function onBurgerClick() {
+//   const insideBurger = document.querySelector("#link-index");
 
-  if (insideBurger.style.display === "block") {
-    insideBurger.style.display = "none";
-  } else {
-    insideBurger.style.display = "block";
-  }
-}
+//   if (insideBurger.style.display === "block") {
+//     insideBurger.style.display = "none";
+//   } else {
+//     insideBurger.style.display = "block";
+//   }
+// }
+
+// gear.addEventListener("click", onBurgerClick);
 
 //ALTERNATIVE: HAMBURGER MENU
 
@@ -393,5 +390,3 @@ function onBurgerClick() {
 // }
 
 // burger.addEventListener("click", onBurgerClick);
-
-// gear.addEventListener("click", onBurgerClick);
