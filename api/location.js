@@ -18,8 +18,6 @@ export default async function handler(req, res) {
 
   const { place } = req.query;
 
-  console.log("INSIDE LOCATION");
-
   try {
     const API_KEY = process.env.PAPAPI_API_KEY;
     const locationName = encodeURIComponent(place);

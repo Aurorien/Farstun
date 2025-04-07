@@ -61,9 +61,6 @@ function fetchStation(stationName) {
       return response.json();
     })
     .then((result) => {
-      console.log("fetchStation Resultat", result);
-      console.log("fetchStation Resultat.results", result.results);
-
       let stopArray = [];
 
       // avoids general places id that cannot show as one station
@@ -128,7 +125,6 @@ function fetchLocation(place) {
       return response.json();
     })
     .then((result) => {
-      console.log("LocationFetch", result);
       weatherPlaceArray = result.results.filter((item, index) => {
         const check =
           result.results.findIndex(
@@ -137,15 +133,11 @@ function fetchLocation(place) {
         return check;
       });
 
-      console.log("weatherPlaceArray", weatherPlaceArray);
-
       let placeList = [];
 
       weatherPlaceArray.forEach((obj) => {
         placeList.push(`${obj.city}, ${obj.county}`);
       });
-
-      console.log("PLACElist", placeList);
 
       dropdownSuggestions(
         placeList,
@@ -326,13 +318,10 @@ if (localStorage.getItem("weatherPlace")) {
 // );
 
 changeButton.addEventListener("click", async () => {
-  console.log("Change button clicked"); // Add this log to verify the click event works
-
   if (weatherPlaceInput.value !== "") {
     const weatherObjectSelected = weatherPlaceArray.filter((obj) =>
       weatherPlaceInput.value.includes(obj.city)
     );
-    console.log("Weather object selected:", weatherObjectSelected);
 
     if (weatherObjectSelected && weatherObjectSelected.length > 0) {
       localStorage.setItem(
@@ -368,16 +357,11 @@ changeButton.addEventListener("click", async () => {
   // }
 
   if (vtInputStop.value) {
-    console.log("VT input stop value:", vtInputStop.value);
-    console.log("Filtered stop array:", filteredstopArray);
-
     // Make sure filteredstopArray exists and has elements before filtering
     if (filteredstopArray && filteredstopArray.length > 0) {
       const vtObjectSelected = filteredstopArray.filter((obj) =>
         vtInputStop.value.includes(obj.name)
       );
-
-      console.log("VT object selected:", vtObjectSelected);
 
       if (vtObjectSelected && vtObjectSelected.length > 0) {
         localStorage.setItem("vtInputStopId", vtObjectSelected[0].gid);

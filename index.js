@@ -52,7 +52,6 @@ function fetchVtData(stationId) {
       return response.json();
     })
     .then((result) => {
-      console.log("fetchData Resultat", result);
       departureboard = result.results;
       console.log("Västtrafik", departureboard);
 
@@ -234,11 +233,8 @@ function weatherStart() {
 
 async function fetchWeatherData(lat, lon) {
   try {
-    console.log("INSIDE fetchWeatherData");
     const response = await fetch(`/api/weather.js?lat=${lat}&lon=${lon}`);
     const data = await response.json();
-
-    console.log("WHEATHERdata", data);
 
     if (response.ok) {
       const now = data.current;
@@ -246,7 +242,6 @@ async function fetchWeatherData(lat, lon) {
 
       // Process current weather
       sunrise = new Date(now.sys.sunrise * 1000);
-      console.log("sunrise", sunrise);
       sunset = new Date(now.sys.sunset * 1000);
       const rise = sunrise.toTimeString(),
         set = sunset.toTimeString();

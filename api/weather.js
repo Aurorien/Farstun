@@ -18,8 +18,6 @@ export default async function handler(req, res) {
 
   const { lat, lon } = req.query;
 
-  console.log("ISIDE WEATHER");
-
   try {
     const API_KEY = process.env.OPENWEATHER_API_KEY;
 
@@ -27,8 +25,6 @@ export default async function handler(req, res) {
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=se&units=metric&appid=${API_KEY}`
     );
     const weatherData = await weatherResponse.json();
-
-    console.log("weatherData", weatherData);
 
     const forecastResponse = await fetch(
       `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=se&units=metric&appid=${API_KEY}`
