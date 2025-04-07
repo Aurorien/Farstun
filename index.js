@@ -53,8 +53,6 @@ function fetchVtData(stationId) {
     })
     .then((result) => {
       departureboard = result.results;
-      console.log("Västtrafik", departureboard);
-
       // en början på en variant (av Jon):
       // const a = [vtFirstDpSname, vtSecondDpSname, vtThirdDpSname];
 
