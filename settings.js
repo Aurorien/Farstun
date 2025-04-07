@@ -302,7 +302,6 @@ if (localStorage.getItem("weatherPlace")) {
 //     animeSuggUl.style.display = "none";
 //   }
 // });
-// console.log("AAANIMEEE", animeBoxAnimeInput.value);
 
 // if (localStorage.getItem("animeBoxAnime")) {
 //   animeBoxAnimeInput.setAttribute(
