@@ -40,117 +40,101 @@ let // vtTdDpLine = document.querySelector("#td-dp-line"),
 // vtDpButtonStop = document.querySelector("#vt-dp-button-stop"), ///
 
 function fetchVtData(stationId) {
-  console.log("fetchData stationId:", JSON.stringify(stationId));
-
   if (stationId === null && localStorage.getItem("vtInputStopId") === null) {
     stationId = "9021014004940000";
   }
 
-  fetch("https://ext-api.vasttrafik.se/token", {
-    body: "grant_type=client_credentials&scope=0",
-    headers: {
-      Authorization:
-        "Basic ***REMOVED***",
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    method: "POST",
-  })
-    .then((response) => response.json())
+  fetch(`/api/vtdepartures.js?stationId=${stationId}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
+      return response.json();
+    })
     .then((result) => {
-      fetch(
-        `https://ext-api.vasttrafik.se/pr/v4/stop-areas/${stationId}/departures`,
-        {
-          headers: {
-            Authorization: `Bearer ${result.access_token}`,
-          },
+      console.log("fetchData Resultat", result);
+      departureboard = result.results;
+      console.log("Västtrafik", departureboard);
+
+      // en början på en variant (av Jon):
+      // const a = [vtFirstDpSname, vtSecondDpSname, vtThirdDpSname];
+
+      // troligen en lösning som fixar hela paketet med en loop (av Jon):
+      // const trs = document.querySelector("tr");
+
+      // // Skip first tr due to headings
+      // for (let n = 1; n < trs.length; n++) {
+      //   trs[n].querySelector(".sname").textContent =
+      //     departureboard[n].sname;
+      //   trs[n].querySelector(".direction").textContent =
+      //     departureboard[n].sname;
+      //   trs[n].querySelector(".time").textContent = departureboard[n].sname;
+      // }
+      function getTimeDifference(dateTime) {
+        const departureTime = new Date(dateTime),
+          now = new Date(),
+          diff = departureTime - now,
+          diffInMinutes = Math.floor(diff / 1000 / 60);
+
+        if (diffInMinutes < 1) {
+          return `Now`;
+        } else {
+          return `${diffInMinutes} min.`;
         }
-      )
-        .then((response) => response.json())
-        .then((result) => {
-          console.log("fetchData Resultat", result);
-          departureboard = result.results;
-          console.log("Västtrafik", departureboard);
+      }
 
-          // en början på en variant (av Jon):
-          // const a = [vtFirstDpSname, vtSecondDpSname, vtThirdDpSname];
+      vtFirstDpSname.textContent = departureboard[0]
+        ? departureboard[0].serviceJourney.line.shortName
+        : "";
+      vtFirstDpSname.style.backgroundColor = departureboard[0]
+        ? departureboard[0].serviceJourney.line.backgroundColor
+        : "";
+      vtFirstDpSname.style.color = departureboard[0]
+        ? departureboard[0].serviceJourney.line.foregroundColor
+        : "";
+      vtFirstDpDirection.textContent = departureboard[0]
+        ? departureboard[0].serviceJourney.direction
+        : "";
+      vtFirstDpTime.textContent = departureboard[0]
+        ? getTimeDifference(departureboard[0].estimatedTime)
+        : "";
 
-          // troligen en lösning som fixar hela paketet med en loop (av Jon):
-          // const trs = document.querySelector("tr");
+      vtSecondDpSname.textContent = departureboard[1]
+        ? departureboard[1].serviceJourney.line.shortName
+        : "";
+      vtSecondDpSname.style.backgroundColor = departureboard[1]
+        ? departureboard[1].serviceJourney.line.backgroundColor
+        : "";
+      vtSecondDpSname.style.color = departureboard[1]
+        ? departureboard[1].serviceJourney.line.foregroundColor
+        : "";
+      vtSecondDpDirection.textContent = departureboard[1]
+        ? departureboard[1].serviceJourney.direction
+        : "";
+      vtSecondDpTime.textContent = departureboard[1]
+        ? getTimeDifference(departureboard[1].estimatedTime)
+        : "";
 
-          // // Skip first tr due to headings
-          // for (let n = 1; n < trs.length; n++) {
-          //   trs[n].querySelector(".sname").textContent =
-          //     departureboard[n].sname;
-          //   trs[n].querySelector(".direction").textContent =
-          //     departureboard[n].sname;
-          //   trs[n].querySelector(".time").textContent = departureboard[n].sname;
-          // }
-          function getTimeDifference(dateTime) {
-            const departureTime = new Date(dateTime),
-              now = new Date(),
-              diff = departureTime - now,
-              diffInMinutes = Math.floor(diff / 1000 / 60);
+      vtThirdDpSname.textContent = departureboard[2]
+        ? departureboard[2].serviceJourney.line.shortName
+        : "";
+      vtThirdDpSname.style.backgroundColor = departureboard[2]
+        ? departureboard[2].serviceJourney.line.backgroundColor
+        : "";
+      vtThirdDpSname.style.color = departureboard[2]
+        ? departureboard[2].serviceJourney.line.foregroundColor
+        : "";
+      vtThirdDpDirection.textContent = departureboard[2]
+        ? departureboard[2].serviceJourney.direction
+        : "";
+      vtThirdDpTime.textContent = departureboard[2]
+        ? getTimeDifference(departureboard[2].estimatedTime)
+        : "";
 
-            if (diffInMinutes < 1) {
-              return `Now`;
-            } else {
-              return `${diffInMinutes} min.`;
-            }
-          }
+      vtStationp.textContent = departureboard[0].stopPoint.name;
 
-          vtFirstDpSname.textContent = departureboard[0]
-            ? departureboard[0].serviceJourney.line.shortName
-            : "";
-          vtFirstDpSname.style.backgroundColor = departureboard[0]
-            ? departureboard[0].serviceJourney.line.backgroundColor
-            : "";
-          vtFirstDpSname.style.color = departureboard[0]
-            ? departureboard[0].serviceJourney.line.foregroundColor
-            : "";
-          vtFirstDpDirection.textContent = departureboard[0]
-            ? departureboard[0].serviceJourney.direction
-            : "";
-          vtFirstDpTime.textContent = departureboard[0]
-            ? getTimeDifference(departureboard[0].estimatedTime)
-            : "";
-
-          vtSecondDpSname.textContent = departureboard[1]
-            ? departureboard[1].serviceJourney.line.shortName
-            : "";
-          vtSecondDpSname.style.backgroundColor = departureboard[1]
-            ? departureboard[1].serviceJourney.line.backgroundColor
-            : "";
-          vtSecondDpSname.style.color = departureboard[1]
-            ? departureboard[1].serviceJourney.line.foregroundColor
-            : "";
-          vtSecondDpDirection.textContent = departureboard[1]
-            ? departureboard[1].serviceJourney.direction
-            : "";
-          vtSecondDpTime.textContent = departureboard[1]
-            ? getTimeDifference(departureboard[1].estimatedTime)
-            : "";
-
-          vtThirdDpSname.textContent = departureboard[2]
-            ? departureboard[2].serviceJourney.line.shortName
-            : "";
-          vtThirdDpSname.style.backgroundColor = departureboard[2]
-            ? departureboard[2].serviceJourney.line.backgroundColor
-            : "";
-          vtThirdDpSname.style.color = departureboard[2]
-            ? departureboard[2].serviceJourney.line.foregroundColor
-            : "";
-          vtThirdDpDirection.textContent = departureboard[2]
-            ? departureboard[2].serviceJourney.direction
-            : "";
-          vtThirdDpTime.textContent = departureboard[2]
-            ? getTimeDifference(departureboard[2].estimatedTime)
-            : "";
-
-          vtStationp.textContent = departureboard[0].stopPoint.name;
-
-          //the div-containern with departures is only displayed when the fetch is finished with the code below
-          document.querySelector("#vtbox").style.display = "block";
-        });
+      //the div-containern with departures is only displayed when the fetch is finished with the code below
+      document.querySelector("#vtbox").style.display = "block";
     });
 }
 
@@ -187,23 +171,23 @@ setInterval(() => {
 ///////////////////////////////////////////////////////////////////
 //Animebox:
 
-let animeQuote = document.querySelector("#animequote"),
-  animeChar = document.querySelector("#animechar"),
-  animeTitle;
+// let animeQuote = document.querySelector("#animequote"),
+//   animeChar = document.querySelector("#animechar"),
+//   animeTitle;
 
-if (localStorage.getItem("animeBoxAnime")) {
-  animeTitle = encodeURIComponent(localStorage.getItem("animeBoxAnime"));
-} else {
-  animeTitle = "Naruto";
-  localStorage.setItem("animeBoxAnime", animeTitle);
-}
+// if (localStorage.getItem("animeBoxAnime")) {
+//   animeTitle = encodeURIComponent(localStorage.getItem("animeBoxAnime"));
+// } else {
+//   animeTitle = "Naruto";
+//   localStorage.setItem("animeBoxAnime", animeTitle);
+// }
 
-fetch(`https://animechan.xyz/api/random/anime?title=${animeTitle}`)
-  .then((response) => response.json())
-  .then((quote) => {
-    animeQuote.textContent = `"${quote.quote}"`;
-    animeChar.textContent = `-- ${quote.character}  (${quote.anime})`;
-  });
+// fetch(`https://animechan.xyz/api/random/anime?title=${animeTitle}`)
+//   .then((response) => response.json())
+//   .then((quote) => {
+//     animeQuote.textContent = `"${quote.quote}"`;
+//     animeChar.textContent = `-- ${quote.character}  (${quote.anime})`;
+//   });
 
 ///////////////////////////////////////////////////////////////////
 //Weatherbox:

@@ -1,6 +1,6 @@
 @font-face {
   font-family: cosmo;
-  src: url(PressStart2P-Regular.ttf) format(truetype);
+  src: url("assets/fonts/PressStart2P-Regular.ttf") format(truetype);
 }
 
 html,
@@ -21,7 +21,7 @@ body {
 }
 
 #image-container {
-  background-image: url(mushroomtreeverle.png);
+  background-image: url("assets/mushroomtreeverle.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;

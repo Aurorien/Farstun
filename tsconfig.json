@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "es2020",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./api/*",
+    "noEmit": true,
+    "allowJs": true,
+  },
+  "include": ["./api/**/*"],
+  "exclude": ["node_modules"]
+}
+
+// {
+//   "compilerOptions": {
+//     "outDir": "./api/*",
+//     "target": "es2015",
+//     "module": "es2015",
+//     "moduleResolution": "node",
+//     "allowJs": true,
+//     "strict": false,
+//     "esModuleInterop": true,
+//     "skipLibCheck": true,
+//     "forceConsistentCasingInFileNames": true
+//   },
+//   "include": ["./api/**/*"],
+//   "exclude": ["node_modules"]
+// }

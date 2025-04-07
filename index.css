@@ -1,16 +1,16 @@
 @font-face {
   font-family: VtFont;
-  src: url("Epilogue-VariableFont_wght.ttf") format("truetype");
+  src: url("assets/fonts/Epilogue-VariableFont_wght.ttf") format("truetype");
 }
 
 @font-face {
   font-family: ZvtFont;
-  src: url("Orbitron-VariableFont_wght.ttf") format("truetype");
+  src: url("assets/fonts/Orbitron-VariableFont_wght.ttf") format("truetype");
 }
 
 @font-face {
   font-family: cosmo;
-  src: url(PressStart2P-Regular.ttf) format(truetype);
+  src: url("assets/fonts/PressStart2P-Regular.ttf") format(truetype);
 }
 
 body {
@@ -20,7 +20,7 @@ body {
   max-width: 100vw;
   margin: 0;
   background-color: rgb(8, 8, 8);
-  background-image: url(ek.png);
+  background-image: url("assets/ek.png");
   background-repeat: no-repeat;
   background-position: top center;
   background-size: 110%;
