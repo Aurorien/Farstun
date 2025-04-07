@@ -120,11 +120,13 @@ const weatherPlaceInput = document.querySelector("#set-weather-place"),
 let weatherPlaceArray = [];
 
 function fetchLocation(place) {
-  const locationName = encodeURIComponent(place);
-  fetch(
-    `https://api.papapi.se/lite/?query=${locationName}&format=json&apikey=***REMOVED***`
-  )
-    .then((response) => response.json())
+  fetch(`/api/location.js?place=${place}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
+      return response.json();
+    })
     .then((result) => {
       console.log("LocationFetch", result);
       weatherPlaceArray = result.results.filter((item, index) => {

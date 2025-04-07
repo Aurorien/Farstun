@@ -214,7 +214,6 @@ function weatherStart() {
   if (localStorage.getItem("weatherLatitude") !== null) {
     latitude = localStorage.getItem("weatherLatitude");
     longitude = localStorage.getItem("weatherLongitude");
-    // console.log("LON LAT", longitude, latitude);
   } else {
     latitude = "57.7088700";
     longitude = "11.9745600";
@@ -230,44 +229,35 @@ function weatherStart() {
     weatherH2Pcpn.textContent = `Väder i Göteborg`;
   }
 
-  fetchWeather(latitude, longitude);
-  fetchForecast(latitude, longitude);
+  fetchWeatherData(latitude, longitude);
 }
 
-function fetchWeather(lat, lon) {
-  // the weather right now
-  fetch(
-    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=se&units=metric&appid=***REMOVED***`
-  )
-    .then((response) => response.json())
-    .then((now) => {
-      // console.log("weather", now);
-      // console.log("weatherTempNow", now.main.temp);
+async function fetchWeatherData(lat, lon) {
+  try {
+    console.log("INSIDE fetchWeatherData");
+    const response = await fetch(`/api/weather.js?lat=${lat}&lon=${lon}`);
+    const data = await response.json();
 
-      // ref: https://www.epochconverter.com/programming/#javascript
+    console.log("WHEATHERdata", data);
+
+    if (response.ok) {
+      const now = data.current;
+      const forecast = data.forecast;
+
+      // Process current weather
       sunrise = new Date(now.sys.sunrise * 1000);
+      console.log("sunrise", sunrise);
       sunset = new Date(now.sys.sunset * 1000);
-
       const rise = sunrise.toTimeString(),
         set = sunset.toTimeString();
 
-      weatherTempNow.textContent = `${now.main.temp}  ºC`;
+      weatherTempNow.textContent = `${now.main.temp} ºC`;
       weatherWindNow.textContent = `${now.wind.speed} m/s`;
       weatherPcpnNow.textContent = `${now.weather[0].description}`;
-      weatherSunrise.textContent = ` Upp:  ${rise.substring(0, 5)}`;
-      weatherSunset.textContent = ` Ner:  ${set.substring(0, 5)}`;
-    });
-}
+      weatherSunrise.textContent = ` Upp: ${rise.substring(0, 5)}`;
+      weatherSunset.textContent = ` Ner: ${set.substring(0, 5)}`;
 
-function fetchForecast(lon, lat) {
-  // forecast in three hours intervals
-  fetch(
-    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=se&units=metric&appid=***REMOVED***`
-  )
-    .then((response) => response.json())
-    .then((forecast) => {
-      // console.log("Forecast", forecast);
-
+      // Process forecast
       weatherWindForecast.textContent = "";
       weatherPcpnForecast.textContent = "";
       weatherTempForecast.textContent = "";
@@ -277,24 +267,28 @@ function fetchForecast(lon, lat) {
           fweatherdt = forecast.list[i].dt_txt,
           ftempdt = forecast.list[i].dt_txt;
 
-        weatherWindForecast.textContent += ` ${fwinddt.substring(11, 16)} :  ${
+        weatherWindForecast.textContent += ` ${fwinddt.substring(11, 16)} : ${
           forecast.list[i].wind.speed
-        } m/s  \n`;
-        weatherPcpnForecast.textContent += `${fweatherdt.substring(
-          10,
-          16
-        )} :  ${forecast.list[i].weather[0].description} \n`;
-        weatherTempForecast.textContent += `${ftempdt.substring(10, 16)} :  ${
+        } m/s \n`;
+        weatherPcpnForecast.textContent += `${fweatherdt.substring(10, 16)} : ${
+          forecast.list[i].weather[0].description
+        } \n`;
+        weatherTempForecast.textContent += `${ftempdt.substring(10, 16)} : ${
           forecast.list[i].main.temp
-        } ºC  \n`;
+        } ºC \n`;
       }
 
       chartTemp(forecast);
-    });
+    } else {
+      console.error("Error fetching weather:", data.error);
+    }
+  } catch (error) {
+    console.error("Failed to fetch weather data:", error);
+  }
 }
 
 weatherStart();
-setInterval(weatherStart, 12000000);
+setInterval(weatherStart, 12000000); // 3.3 hours
 
 ///////////////////////////////////////////////////////////////////
 // Chart.js
