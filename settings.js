@@ -5,16 +5,13 @@ function dropdownSuggestions(array, list, input, button) {
   array.forEach((arrayValue) => {
     innerText += `
       <li class="dropdown">${arrayValue}</li>`;
-    // console.log("ArrayValue", arrayValue);
   });
 
   list.innerHTML = innerText;
   list.style.display = "block";
   list.addEventListener("click", (event) => {
     const value = event.target.innerText;
-    console.log("VALUE", event);
     input.value = value;
-    console.log("INPUTVALUE", input.value);
     list.style.display = "none";
     button.disabled = false;
   });
@@ -32,11 +29,7 @@ function dropdownSuggestions(array, list, input, button) {
 document.addEventListener("click", (event) => {
   if (!event.target.closest(".dropdown")) {
     const dropdown = document.querySelectorAll(".dropdown");
-    // console.log("DROPDOWN", dropdown);
     for (let i = 0; i < dropdown.length; i++) {
-      // if (dropdown[i].style.display === "block") {
-      //   dropdown[i].style.display = "none";
-      // }
       dropdown[i].style.display = "none";
     }
   }
@@ -75,20 +68,13 @@ function fetchStation(stationName) {
 
       // avoids general places id that cannot show as one station
       const firstFourStopLocations = result.results.slice(0, 4);
-      console.log("firstFourStopLocations", firstFourStopLocations);
-      // const filteredStopLocations = firstFourStopLocations.filter(
-      //   (location) => location.gid.slice(0, 14) !== "00000008000000"
-      // );
 
       const filteredStopLocations = firstFourStopLocations.filter(
         (location) =>
           location?.gid && location.gid.slice(0, 14) !== "00000008000000"
       );
 
-      console.log("filteredStopLocations", filteredStopLocations);
-
       stopArray.push(...filteredStopLocations);
-      console.log("STOParray", stopArray);
 
       // makes a list of object filtered to only the keys and values needed
       const selectedKeys = ["name", "gid"];
@@ -96,8 +82,6 @@ function fetchStation(stationName) {
       filteredstopArray = stopArray.map((obj) =>
         selectedKeys.reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {})
       );
-
-      console.log("FILTERED", filteredstopArray);
 
       let filtList = [];
 
@@ -109,8 +93,6 @@ function fetchStation(stationName) {
       if (filtList.length > 3) {
         filtList = filtList.slice(0, 3);
       }
-      // console.log("PUSH", filtList);
-      // console.log("VTinputSTOP", vtInputStop);
       dropdownSuggestions(filtList, vtSuggUl, vtInputStop, changeButton);
     });
 }
