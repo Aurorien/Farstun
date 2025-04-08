@@ -285,8 +285,6 @@ if (localStorage.getItem("weatherPlace")) {
 //   return result;
 // }
 
-// console.log("Värde", animeBoxAnimeInput.value);
-
 // animeBoxAnimeInput.addEventListener("input", () => {
 //   changeButton.disabled = true;
 //   if (animeBoxAnimeInput.value.length > 2) {
