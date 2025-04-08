@@ -145,9 +145,7 @@ setInterval(() => {
 //Updates the departure board once per click with a timed delay:
 // vtDpButton.addEventListener("click", () => {
 //   let currStop = localStorage.getItem("saveStop");
-//   console.log(currStop);
 //   fetchVtData(currStop);
-//   console.log("fetchVtDataTIMEOUT", fetchVtData);
 // });
 
 //Continuous update with a time interval:
