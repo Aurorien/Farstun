@@ -82,13 +82,14 @@ body {
 #weather-wind-now,
 #weather-temp-now {
   font-size: 1.3rem;
-  margin: 4% 0 4% 3%;
+  margin: 7% 0 7% 4%;
 }
 
 .forecast-topic {
   font-size: 0.8rem;
   font-style: bold;
   padding-left: 2px;
+  margin-top: 0;
   margin-bottom: 3px;
 }
 
