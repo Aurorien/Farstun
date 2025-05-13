@@ -67,13 +67,14 @@ label {
 
 #set-home-link {
   background-color: #15260f;
-  height: min-content;
+  padding-top: 2px;
 }
 
 #arrow {
   color: rgb(230, 235, 216);
   font-size: 16px;
-  padding: 0 3px 5px 3px;
+  padding: 2px 3px 5px 3px;
+  margin-left: 5px;
 }
 
 a:visited,
