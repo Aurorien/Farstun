@@ -46,6 +46,7 @@ body {
 
 #weatherbox {
   min-height: 100vh;
+  max-width: 330px;
   background-color: rgba(22, 32, 32, 0.8);
   font-family: sans-serif;
   color: white;
