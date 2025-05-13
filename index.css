@@ -89,7 +89,7 @@ body {
 .forecast-topic {
   font-size: 0.8rem;
   font-style: bold;
-  color: #b6c2d9;
+  color: #c5d2eb;
   padding-left: 2px;
   margin-top: 0;
   margin-bottom: 3px;
@@ -97,7 +97,7 @@ body {
 
 .forecast {
   font-size: 0.8rem;
-  color: #afbcd2;
+  color: #c2d0e8;
   margin-top: 2px;
   white-space: pre-wrap;
 }
@@ -113,6 +113,7 @@ body {
 }
 
 #weather-h2-sun {
+  color: floralwhite;
   padding-bottom: 12px;
 }
 
