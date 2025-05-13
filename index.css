@@ -89,7 +89,7 @@ body {
 .forecast-topic {
   font-size: 0.8rem;
   font-style: bold;
-  color: #c5d2eb;
+  color: #d8e2f4;
   padding-left: 2px;
   margin-top: 0;
   margin-bottom: 3px;
@@ -97,7 +97,7 @@ body {
 
 .forecast {
   font-size: 0.8rem;
-  color: #c2d0e8;
+  color: #d2dcee;
   margin-top: 2px;
   white-space: pre-wrap;
 }
