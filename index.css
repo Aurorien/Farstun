@@ -89,7 +89,7 @@ body {
 .forecast-topic {
   font-size: 0.8rem;
   font-style: bold;
-  color: #d8e2f4;
+  color: #a5b3cc;
   padding-left: 2px;
   margin-top: 0;
   margin-bottom: 3px;
@@ -97,7 +97,7 @@ body {
 
 .forecast {
   font-size: 0.8rem;
-  color: #d2dcee;
+  color: #a1aec3;
   margin-top: 2px;
   white-space: pre-wrap;
 }
@@ -110,10 +110,13 @@ body {
 
 #weather-sunbox {
   grid-area: weathersun;
+  color: orange;
 }
 
 #weather-h2-sun {
-  color: floralwhite;
+  /* color: floralwhite; */
+  color: #fdac32;
+
   padding-bottom: 12px;
 }
 
@@ -121,6 +124,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #fdac32;
+
   gap: 0.7rem;
   p {
     margin: 7px;
