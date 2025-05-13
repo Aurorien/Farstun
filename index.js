@@ -243,8 +243,8 @@ async function fetchWeatherData(lat, lon) {
       weatherTempNow.textContent = `${now.main.temp} ºC`;
       weatherWindNow.textContent = `${now.wind.speed} m/s`;
       weatherPcpnNow.textContent = `${now.weather[0].description}`;
-      weatherSunrise.textContent = ` Upp: ${rise.substring(0, 5)}`;
-      weatherSunset.textContent = ` Ner: ${set.substring(0, 5)}`;
+      weatherSunrise.textContent = `${rise.substring(0, 5)}`;
+      weatherSunset.textContent = `${set.substring(0, 5)}`;
 
       // Process forecast
       weatherWindForecast.textContent = "";

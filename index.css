@@ -117,10 +117,22 @@ body {
   padding-bottom: 12px;
 }
 
+.weather-sun-ctn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+  p {
+    margin: 7px;
+  }
+}
+
 #weather-sunrise,
 #weather-sunset {
-  font-size: 1.3rem;
-  margin: 3px 0 0 5px;
+  font-size: 1.2rem;
+  height: max-content;
+  /* margin: 3px 0 0 5px;
+  margin: 0; */
   white-space: pre-wrap;
 }
 
