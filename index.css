@@ -69,6 +69,7 @@ body {
 .weather-topic {
   font-size: 1rem;
   font-weight: 600;
+  color: rgb(226, 241, 255);
   margin: 3px 0 0 0;
 }
 
@@ -88,6 +89,7 @@ body {
 .forecast-topic {
   font-size: 0.8rem;
   font-style: bold;
+  color: rgb(210, 233, 255);
   padding-left: 2px;
   margin-top: 0;
   margin-bottom: 3px;
